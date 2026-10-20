@@ -36,6 +36,7 @@ FEATURE_COLUMNS = [
 
 CLEAN_FILENAME = "HomeMate_residential.csv"
 RAW_FILENAME = "Makaan_Properties_Buy.csv"
+COMPRESSED_FILENAME = "compressed_data.csv.gz"
 EXPLORE_MAX_ROWS = 20000
 
 
@@ -108,13 +109,17 @@ def parse_number(value):
         return np.nan
 
 
+
 def read_csv_safely(path):
+    path = Path(path)
+
     for encoding in ("utf-8", "utf-8-sig", "cp1252", "latin1"):
         try:
             return pd.read_csv(
                 path,
                 low_memory=False,
-                encoding=encoding
+                encoding=encoding,
+                compression="infer"
             )
         except UnicodeDecodeError:
             continue
@@ -137,11 +142,12 @@ def normalize_columns(df):
 
 
 def load_dataset(prefer_cleaned=False):
-    filenames = (
-        [CLEAN_FILENAME, RAW_FILENAME]
-        if prefer_cleaned
-        else [RAW_FILENAME, CLEAN_FILENAME]
-    )
+    
+    filenames = ([CLEAN_FILENAME, COMPRESSED_FILENAME, RAW_FILENAME]
+    if prefer_cleaned
+    else [COMPRESSED_FILENAME, RAW_FILENAME, CLEAN_FILENAME]
+)
+
 
     for filename in filenames:
         path = find_dataset(filename)
