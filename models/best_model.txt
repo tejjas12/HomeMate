@@ -1,0 +1,3 @@
+Best model by test MAE: Decision Tree
+Decision Tree test R2: 0.7167
+Decision Tree test MAE: 8938273.49 INR

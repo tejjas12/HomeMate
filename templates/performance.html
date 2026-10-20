@@ -1,0 +1,927 @@
+
+{% extends "base.html" %}
+
+{% block title %}Model Performance | HomeMate{% endblock %}
+{% block page_heading %}Model Performance{% endblock %}
+
+{% block content %}
+
+<style>
+/* ==========================================
+   HomeMate - Model Performance
+   Black | Subtle Purple | Neon Lime
+   ========================================== */
+
+.performance-page {
+    --hm-black: #08090B;
+    --hm-purple: #24182F;
+    --hm-lime: #B7FF38;
+    --hm-soft-purple: #B77AFF;
+    --hm-white: #F5F5F5;
+    --hm-muted: #A9A2B5;
+    --hm-border: rgba(183, 122, 255, 0.20);
+
+    color: var(--hm-white);
+    padding-bottom: 30px;
+}
+
+.performance-page * {
+    box-sizing: border-box;
+}
+
+/* HERO */
+
+.performance-hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 18px;
+    padding: 28px;
+    margin-bottom: 24px;
+    border: 1px solid var(--hm-border);
+    border-radius: 22px;
+    background:
+        radial-gradient(
+            ellipse at 95% 0%,
+            rgba(183, 122, 255, 0.15),
+            transparent 45%
+        ),
+        linear-gradient(135deg, #15101B, #0C0B10 70%, #171020);
+}
+
+.performance-hero h1 {
+    margin: 0 0 9px;
+    font-size: clamp(25px, 3vw, 35px);
+    line-height: 1.25;
+    letter-spacing: -0.8px;
+    font-weight: 850;
+    color: var(--hm-white);
+}
+
+.performance-hero h1 span {
+    color: var(--hm-lime);
+}
+
+.performance-hero p {
+    margin: 0;
+    max-width: 600px;
+    color: var(--hm-muted);
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.performance-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border: 1px solid rgba(183, 255, 56, 0.24);
+    border-radius: 999px;
+    background: rgba(183, 255, 56, 0.06);
+    color: var(--hm-lime);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.6px;
+    white-space: nowrap;
+}
+
+/* SHARED CARD */
+
+.performance-page .card {
+    min-width: 0;
+    padding: 23px;
+    border: 1px solid var(--hm-border);
+    border-radius: 18px;
+    background: linear-gradient(145deg, #15101B, #0D0B11);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.15);
+    transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.performance-page .card:hover {
+    border-color: rgba(183, 122, 255, 0.38);
+}
+
+.performance-page .section-gap {
+    margin-bottom: 22px;
+}
+
+.performance-page .grid {
+    display: grid;
+    gap: 20px;
+}
+
+.performance-page .grid-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+/* SUMMARY CARDS */
+
+.performance-page .summary-card {
+    position: relative;
+    overflow: hidden;
+    padding: 24px;
+}
+
+.performance-page .summary-card::after {
+    content: "";
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    right: -45px;
+    bottom: -50px;
+    border-radius: 50%;
+    background: rgba(183, 122, 255, 0.07);
+    pointer-events: none;
+}
+
+.performance-page .summary-card.accent-lime::after {
+    background: rgba(183, 255, 56, 0.06);
+}
+
+.performance-page .summary-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    margin-bottom: 18px;
+    border: 1px solid rgba(183, 122, 255, 0.20);
+    border-radius: 13px;
+    background: rgba(183, 122, 255, 0.08);
+    color: var(--hm-soft-purple);
+    font-size: 19px;
+}
+
+.performance-page .accent-lime .summary-icon {
+    border-color: rgba(183, 255, 56, 0.20);
+    background: rgba(183, 255, 56, 0.06);
+    color: var(--hm-lime);
+}
+
+.performance-page .card-label {
+    margin: 0 0 9px;
+    color: var(--hm-muted);
+    font-size: 12px;
+    font-weight: 650;
+}
+
+.performance-page .card-value {
+    margin: 0;
+    color: var(--hm-white);
+    font-size: clamp(24px, 3vw, 32px);
+    line-height: 1.3;
+    font-weight: 850;
+    letter-spacing: -0.7px;
+    overflow-wrap: anywhere;
+}
+
+.performance-page .accent-lime .card-value {
+    color: var(--hm-lime);
+}
+
+.performance-page .card-note {
+    margin: 8px 0 0;
+    color: #92899E;
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+/* SECTION TITLES */
+
+.performance-page .section-title {
+    margin: 0 0 9px;
+    color: var(--hm-white);
+    font-size: 18px;
+    line-height: 1.45;
+    font-weight: 800;
+}
+
+.performance-page .section-title span {
+    color: var(--hm-lime);
+}
+
+.performance-page .section-subtitle {
+    margin: 0;
+    color: var(--hm-muted);
+    font-size: 12px;
+    line-height: 1.8;
+}
+
+/* CHARTS */
+
+.performance-page .chart-card {
+    overflow: hidden;
+}
+
+.performance-page .chart-heading {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.performance-page .chart-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 38px;
+    height: 38px;
+    border: 1px solid rgba(183, 255, 56, 0.17);
+    border-radius: 11px;
+    background: rgba(183, 255, 56, 0.06);
+    color: var(--hm-lime);
+    font-size: 17px;
+}
+
+.performance-page .chart-container {
+    position: relative;
+    width: 100%;
+    height: 340px;
+    margin-top: 20px;
+}
+
+.performance-page .chart-footnote {
+    margin-top: 13px;
+    padding: 11px 13px;
+    border: 1px solid rgba(183, 122, 255, 0.12);
+    border-radius: 10px;
+    background: rgba(183, 122, 255, 0.035);
+    color: #A9A2B5;
+    font-size: 11px;
+    line-height: 1.7;
+}
+
+/* MODEL EVALUATION */
+
+.performance-page .metrics-heading {
+    margin: 27px 0 17px;
+}
+
+.performance-page .metrics-heading h2 {
+    margin: 0 0 8px;
+    color: var(--hm-white);
+    font-size: 21px;
+    font-weight: 850;
+}
+
+.performance-page .metrics-heading p {
+    margin: 0;
+    color: var(--hm-muted);
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.performance-page .model-card-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 23px;
+}
+
+.performance-page .model-card-heading h3 {
+    margin: 0;
+    font-size: 19px;
+    font-weight: 800;
+    color: var(--hm-white);
+    overflow-wrap: anywhere;
+}
+
+.performance-page .model-card-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 42px;
+    height: 42px;
+    border: 1px solid rgba(183, 122, 255, 0.20);
+    border-radius: 13px;
+    background: rgba(183, 122, 255, 0.08);
+    color: var(--hm-soft-purple);
+    font-size: 19px;
+}
+
+.performance-page .metric-item {
+    padding: 16px 0;
+    border-top: 1px solid rgba(183, 122, 255, 0.13);
+}
+
+.performance-page .metric-item .card-value {
+    font-size: clamp(22px, 2.5vw, 29px);
+}
+
+.performance-page .metric-item.metric-r2 .card-value {
+    color: var(--hm-lime);
+}
+
+.performance-page .training-time {
+    margin-top: 12px;
+    padding: 13px;
+    border: 1px solid rgba(183, 255, 56, 0.15);
+    border-radius: 11px;
+    background: rgba(183, 255, 56, 0.035);
+    color: #C7EFA0;
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+/* ERROR / EMPTY STATES */
+
+.performance-page .status-card {
+    border-color: rgba(183, 122, 255, 0.25);
+}
+
+.performance-page .status-card .status-icon {
+    margin-bottom: 14px;
+    color: var(--hm-soft-purple);
+    font-size: 25px;
+}
+
+.performance-page .status-card.error {
+    border-color: rgba(248, 113, 113, 0.27);
+    background: linear-gradient(145deg, #1B1016, #0D0B11);
+}
+
+.performance-page .status-card.error .status-icon {
+    color: #FCA5A5;
+}
+
+/* INTERPRETATION */
+
+.performance-page .interpretation-card {
+    margin-top: 23px;
+    border-color: rgba(183, 122, 255, 0.24);
+    background:
+        radial-gradient(
+            ellipse at 100% 0%,
+            rgba(183, 122, 255, 0.09),
+            transparent 50%
+        ),
+        linear-gradient(135deg, #15101B, #0D0B11);
+}
+
+.performance-page .interpretation-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 12px;
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--hm-white);
+}
+
+.performance-page .interpretation-title span {
+    color: var(--hm-lime);
+}
+
+.performance-page .interpretation-card p {
+    margin: 0;
+    color: #B8AFC4;
+    font-size: 13px;
+    line-height: 1.9;
+}
+
+.performance-page .interpretation-card strong {
+    color: var(--hm-lime);
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 850px) {
+    .performance-page .grid-2 {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .performance-page .chart-container {
+        height: 310px;
+    }
+}
+
+@media (max-width: 560px) {
+    .performance-hero {
+        padding: 21px;
+        border-radius: 17px;
+    }
+
+    .performance-hero h1 {
+        font-size: 27px;
+    }
+
+    .performance-page .card {
+        padding: 19px;
+    }
+
+    .performance-page .chart-container {
+        height: 275px;
+    }
+
+    .performance-page .metrics-heading h2 {
+        font-size: 19px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .performance-page *,
+    .performance-page *::before,
+    .performance-page *::after {
+        transition: none !important;
+        animation: none !important;
+    }
+}
+</style>
+
+<div class="performance-page">
+
+    <!-- HERO -->
+    <section class="performance-hero">
+        <div>
+            <h1>Model <span>Performance</span></h1>
+            <p>
+                Analyze prediction accuracy and error distribution
+                using your trained machine learning models.
+            </p>
+        </div>
+
+        <span class="performance-badge">
+            ✦ ML EVALUATION
+        </span>
+    </section>
+
+    <!-- PERFORMANCE ERROR -->
+    {% if performance_error %}
+
+    <div class="card status-card error section-gap">
+        <div class="status-icon">⚠</div>
+        <h2 class="section-title">Performance charts unavailable</h2>
+        <p class="card-note">{{ performance_error }}</p>
+        <p class="card-note">
+            Check that the dataset and saved model files are available.
+        </p>
+    </div>
+
+    {% else %}
+
+    <!-- SUMMARY CARDS -->
+    <div class="grid grid-2 section-gap">
+
+        <div class="card summary-card accent-lime">
+            <div class="summary-icon">▦</div>
+            <p class="card-label">Test Samples Displayed</p>
+            <div class="card-value">{{ sample_count }}</div>
+            <p class="card-note">
+                Actual and predicted property prices
+            </p>
+        </div>
+
+        <div class="card summary-card">
+            <div class="summary-icon">⌘</div>
+            <p class="card-label">Evaluation Method</p>
+            <div class="card-value">80 / 20</div>
+            <p class="card-note">
+                Training and testing split, random state 42
+            </p>
+        </div>
+
+    </div>
+
+    <!-- PERFORMANCE CHARTS -->
+    <div class="grid grid-2 section-gap">
+
+        <!-- ACTUAL VS PREDICTED -->
+        <section class="card chart-card">
+
+            <div class="chart-heading">
+                <div class="chart-icon">↗</div>
+                <div>
+                    <h2 class="section-title">
+                        Actual vs Predicted Prices
+                    </h2>
+                    <p class="section-subtitle">
+                        Points closer to the diagonal indicate more accurate
+                        predictions.
+                    </p>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <canvas id="actualPredictedChart"></canvas>
+            </div>
+
+            <div class="chart-footnote">
+                Compare actual property prices with model predictions.
+                Points closer to the ideal line indicate smaller errors.
+            </div>
+
+        </section>
+
+        <!-- RESIDUAL DISTRIBUTION -->
+        <section class="card chart-card">
+
+            <div class="chart-heading">
+                <div class="chart-icon">⌁</div>
+                <div>
+                    <h2 class="section-title">
+                        Residual Error Distribution
+                    </h2>
+                    <p class="section-subtitle">
+                        Residual = actual price minus predicted price.
+                        Values near zero indicate smaller errors.
+                    </p>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <canvas id="residualChart"></canvas>
+            </div>
+
+            <div class="chart-footnote">
+                Residual distribution helps identify prediction bias
+                and the spread of model errors.
+            </div>
+
+        </section>
+
+    </div>
+
+    {% endif %}
+
+    <!-- MODEL EVALUATION METRICS -->
+    <div class="metrics-heading">
+        <h2>Model Evaluation Metrics</h2>
+        <p>
+            Compare prediction errors, explanatory power and training time.
+        </p>
+    </div>
+
+    <div class="grid grid-2 section-gap">
+
+        {% for model in model_comparison %}
+
+        <article class="card">
+
+            <div class="model-card-heading">
+                <h3>{{ model.get('Model', 'Model') }}</h3>
+                <div class="model-card-icon">⌘</div>
+            </div>
+
+            <div class="metric-item">
+                <p class="card-label">Mean Absolute Error (MAE)</p>
+                <div class="card-value">
+                    ₹{{ "{:,.0f}".format(model.get('MAE (INR)', 0)|float) }}
+                </div>
+                <p class="card-note">
+                    Average absolute difference between actual
+                    and predicted prices.
+                </p>
+            </div>
+
+            <div class="metric-item">
+                <p class="card-label">
+                    Root Mean Squared Error (RMSE)
+                </p>
+                <div class="card-value">
+                    ₹{{ "{:,.0f}".format(model.get('RMSE (INR)', 0)|float) }}
+                </div>
+                <p class="card-note">
+                    Gives greater weight to larger prediction errors.
+                </p>
+            </div>
+
+            <div class="metric-item metric-r2">
+                <p class="card-label">R² Score</p>
+                <div class="card-value">
+                    {{ "%.2f"|format(model.get('R2 Score', 0)|float * 100) }}%
+                </div>
+                <p class="card-note">
+                    Proportion of target-price variation explained by the model.
+                </p>
+            </div>
+
+            <div class="training-time">
+                ✦ Training time:
+                <strong>
+                    {{ "%.2f"|format(model.get('Training Time (seconds)', 0)|float) }}
+                    seconds
+                </strong>
+            </div>
+
+        </article>
+
+        {% else %}
+
+        <div class="card status-card">
+            <div class="status-icon">ⓘ</div>
+            <h2 class="section-title">
+                Evaluation report unavailable
+            </h2>
+            <p class="card-note">
+                Check models/model_comparison.csv.
+            </p>
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    <!-- INTERPRETATION -->
+    <section class="card interpretation-card">
+
+        <h2 class="interpretation-title">
+            <span>✦</span>
+            How to interpret the results
+        </h2>
+
+        <p>
+            <strong>MAE and RMSE:</strong>
+            lower values generally indicate smaller prediction errors.
+            <strong>R²:</strong>
+            a higher score indicates that the model explains more variation
+            in property prices. Results depend on the dataset and test split.
+        </p>
+
+    </section>
+
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+{% if not performance_error %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    "use strict";
+
+    const actual = {{ actual_prices | tojson }};
+    const predicted = {{ predicted_prices | tojson }};
+    const residualLabels = {{ residual_labels | tojson }};
+    const residualCounts = {{ residual_counts | tojson }};
+
+    if (typeof Chart === "undefined") {
+        console.error("Chart.js is not loaded. Check base.html.");
+        return;
+    }
+
+    Chart.defaults.color = "#A9A2B5";
+    Chart.defaults.font.family =
+        '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+
+    const commonTooltip = {
+        backgroundColor: "#171020",
+        titleColor: "#F5F5F5",
+        bodyColor: "#D8D0E2",
+        borderColor: "rgba(183, 122, 255, 0.35)",
+        borderWidth: 1,
+        padding: 12
+    };
+
+    // Actual vs predicted scatter chart.
+    const scatterPoints = actual
+        .map((value, index) => ({
+            x: Number(value) / 100000,
+            y: Number(predicted[index]) / 100000
+        }))
+        .filter(point =>
+            Number.isFinite(point.x) &&
+            Number.isFinite(point.y)
+        );
+
+    if (scatterPoints.length && actual.length === predicted.length) {
+        const allValues = scatterPoints.flatMap(point => [
+            point.x,
+            point.y
+        ]);
+
+        const maxValue = Math.max(1, ...allValues);
+        const axisMax = Math.ceil(maxValue / 100) * 100;
+
+        const actualCanvas =
+            document.getElementById("actualPredictedChart");
+
+        if (actualCanvas) {
+            new Chart(actualCanvas, {
+                type: "scatter",
+
+                data: {
+                    datasets: [
+                        {
+                            label: "Predicted Prices",
+                            data: scatterPoints,
+                            backgroundColor: "rgba(183, 122, 255, 0.65)",
+                            borderColor: "#B77AFF",
+                            pointRadius: 3,
+                            pointHoverRadius: 5
+                        },
+                        {
+                            label: "Ideal Prediction",
+                            data: [
+                                { x: 0, y: 0 },
+                                { x: axisMax, y: axisMax }
+                            ],
+                            type: "line",
+                            showLine: true,
+                            pointRadius: 0,
+                            borderColor: "#B7FF38",
+                            borderDash: [6, 5],
+                            borderWidth: 2
+                        }
+                    ]
+                },
+
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+
+                    plugins: {
+                        legend: {
+                            position: "bottom",
+                            labels: {
+                                color: "#C9C0D5",
+                                usePointStyle: true,
+                                padding: 16
+                            }
+                        },
+
+                        tooltip: {
+                            ...commonTooltip,
+
+                            callbacks: {
+                                label(context) {
+                                    const x = context.parsed.x;
+                                    const y = context.parsed.y;
+
+                                    return [
+                                        "Actual: ₹" +
+                                            (x * 100000).toLocaleString("en-IN"),
+                                        "Predicted: ₹" +
+                                            (y * 100000).toLocaleString("en-IN")
+                                    ];
+                                }
+                            }
+                        }
+                    },
+
+                    scales: {
+                        x: {
+                            type: "linear",
+                            min: 0,
+                            max: axisMax,
+
+                            title: {
+                                display: true,
+                                text: "Actual Price (₹ Lakhs)",
+                                color: "#B7FF38"
+                            },
+
+                            ticks: {
+                                color: "#A9A2B5",
+                                maxTicksLimit: 7
+                            },
+
+                            grid: {
+                                color: "rgba(183, 122, 255, 0.10)"
+                            }
+                        },
+
+                        y: {
+                            type: "linear",
+                            min: 0,
+                            max: axisMax,
+
+                            title: {
+                                display: true,
+                                text: "Predicted Price (₹ Lakhs)",
+                                color: "#B7FF38"
+                            },
+
+                            ticks: {
+                                color: "#A9A2B5",
+                                maxTicksLimit: 7
+                            },
+
+                            grid: {
+                                color: "rgba(183, 122, 255, 0.10)"
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    } else {
+        console.warn(
+            "Actual/predicted data is empty or has mismatched lengths."
+        );
+    }
+
+    // Residual error histogram.
+    const residualCanvas = document.getElementById("residualChart");
+
+    if (
+        residualCanvas &&
+        Array.isArray(residualLabels) &&
+        Array.isArray(residualCounts) &&
+        residualLabels.length === residualCounts.length &&
+        residualLabels.length > 0
+    ) {
+        new Chart(residualCanvas, {
+            type: "bar",
+
+            data: {
+                labels: residualLabels,
+
+                datasets: [{
+                    label: "Number of Properties",
+                    data: residualCounts,
+
+                    backgroundColor: "rgba(183, 255, 56, 0.55)",
+                    borderColor: "#B7FF38",
+                    borderWidth: 1,
+                    borderRadius: 5
+                }]
+            },
+
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+
+                plugins: {
+                    legend: {
+                        position: "bottom",
+                        labels: {
+                            color: "#C9C0D5",
+                            usePointStyle: true,
+                            padding: 16
+                        }
+                    },
+
+                    tooltip: {
+                        ...commonTooltip,
+
+                        callbacks: {
+                            title(items) {
+                                return "Residual: " + items[0].label;
+                            },
+
+                            label(context) {
+                                return "Properties: " +
+                                    Number(context.parsed.y)
+                                        .toLocaleString("en-IN");
+                            }
+                        }
+                    }
+                },
+
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: "Residual Error (₹ Lakhs)",
+                            color: "#B7FF38"
+                        },
+
+                        ticks: {
+                            color: "#A9A2B5",
+                            maxTicksLimit: 8,
+                            maxRotation: 35,
+                            minRotation: 0
+                        },
+
+                        grid: {
+                            display: false
+                        }
+                    },
+
+                    y: {
+                        beginAtZero: true,
+
+                        title: {
+                            display: true,
+                            text: "Number of Properties",
+                            color: "#B7FF38"
+                        },
+
+                        ticks: {
+                            color: "#A9A2B5",
+                            precision: 0
+                        },
+
+                        grid: {
+                            color: "rgba(183, 122, 255, 0.10)"
+                        }
+                    }
+                }
+            }
+        });
+    } else {
+        console.warn(
+            "Residual chart data is empty or unavailable."
+        );
+    }
+
+    console.log("HomeMate performance charts initialized.");
+});
+</script>
+{% endif %}
+{% endblock %}

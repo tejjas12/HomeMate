@@ -1,0 +1,1150 @@
+
+/* =====================================================
+   HomeMate — Premium Real Estate Theme
+   Dark Black + Subtle Purple + Neon Lime
+   ===================================================== */
+
+   :root {
+    color-scheme: dark;
+
+    --bg: #08090B;
+    --sidebar: #100D16;
+    --panel: #121116;
+    --panel-hover: #1D1923;
+    --panel-raised: #19151F;
+
+    --border: #30283A;
+    --border-hover: #51405F;
+
+    --text: #F4F2F7;
+    --muted: #A29AAA;
+    --muted-strong: #C1B9C9;
+
+    --accent: #B7FF38;
+    --accent-hover: #CAFF70;
+    --accent-dark: #263716;
+
+    --purple: #B77AFF;
+    --purple-soft: #D0A6FF;
+    --purple-dark: #24182F;
+
+    --green: #B7FF38;
+    --orange: #FFBF69;
+    --red: #FF7185;
+
+    --radius-sm: 9px;
+    --radius-md: 13px;
+    --radius-lg: 18px;
+
+    --shadow-card: 0 12px 32px rgba(0, 0, 0, 0.22);
+    --transition: 0.22s ease;
+}
+
+/* 1. Reset and global styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    background: var(--bg);
+    scrollbar-color: var(--border-hover) var(--bg);
+}
+
+body {
+    min-height: 100vh;
+    min-height: 100dvh;
+    font-family: "Inter", -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+body.menu-open {
+    overflow: hidden;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+img,
+canvas,
+svg {
+    max-width: 100%;
+}
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
+
+button {
+    color: inherit;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+
+::selection {
+    background: var(--accent);
+    color: #10130B;
+}
+
+/* 2. Application layout */
+.app-layout {
+    display: block;
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+}
+
+.main-content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-width: 0;
+    min-height: 100vh;
+    min-height: 100dvh;
+    margin: 0;
+}
+
+.page-content {
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+    flex: 1;
+    margin: 0;
+    padding: 30px 34px;
+}
+
+/* 3. Top navigation */
+.topbar {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+
+    width: 100%;
+    min-height: 78px;
+    padding: 14px 24px;
+
+    background: rgba(8, 9, 11, 0.96);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(16px);
+}
+
+.menu-toggle {
+    display: inline-flex;
+    flex: 0 0 44px;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 5px;
+
+    width: 44px;
+    height: 44px;
+    padding: 9px;
+
+    background: var(--purple-dark);
+    border: 1px solid rgba(183, 122, 255, 0.45);
+    border-radius: 12px;
+
+    color: var(--text);
+    cursor: pointer;
+
+    transition:
+        background var(--transition),
+        border-color var(--transition),
+        transform var(--transition);
+}
+
+.menu-toggle:hover {
+    background: #352343;
+    border-color: var(--purple);
+}
+
+.menu-toggle:active {
+    transform: scale(0.96);
+}
+
+.menu-toggle span {
+    display: block;
+    width: 21px;
+    height: 2px;
+    background: currentColor;
+    border-radius: 3px;
+}
+
+/* Centered HomeMate brand */
+.topbar-brand {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    color: var(--text);
+    white-space: nowrap;
+    text-decoration: none;
+    z-index: 1;
+}
+
+.topbar-brand-icon {
+    display: grid;
+    place-items: center;
+
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+
+    background: linear-gradient(135deg, var(--purple), #7543A5);
+    border: 1px solid rgba(208, 166, 255, 0.3);
+    border-radius: 12px;
+
+    color: #FFFFFF;
+    font-size: 23px;
+    font-weight: 800;
+
+    box-shadow: 0 0 22px rgba(183, 122, 255, 0.13);
+}
+
+.topbar-brand-name {
+    color: var(--text);
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: -0.8px;
+}
+
+.topbar-brand-name span {
+    color: var(--accent);
+}
+
+.topbar-right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+
+    margin-left: auto;
+    position: relative;
+    z-index: 2;
+
+    color: var(--muted-strong);
+    font-size: 11px;
+}
+
+.live-indicator,
+.status-dot {
+    width: 8px;
+    height: 8px;
+    flex-shrink: 0;
+
+    background: var(--accent);
+    border-radius: 50%;
+}
+
+.live-indicator {
+    box-shadow: 0 0 12px rgba(183, 255, 56, 0.35);
+}
+
+.status-dot {
+    margin-top: 7px;
+}
+
+/* 4. Slide-out sidebar */
+.sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+
+    display: block;
+    width: 275px;
+    min-width: 0;
+    max-width: 85vw;
+    height: 100vh;
+    height: 100dvh;
+
+    padding: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    background: var(--sidebar);
+    border-right: 1px solid var(--border);
+
+    z-index: 1002;
+
+    transform: translateX(-110%);
+    visibility: hidden;
+    pointer-events: none;
+
+    box-shadow: 15px 0 45px rgba(0, 0, 0, 0.35);
+
+    transition:
+        transform 0.25s ease,
+        visibility 0.25s ease;
+}
+
+body.menu-open .sidebar {
+    transform: translateX(0);
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.sidebar-menu-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    min-height: 76px;
+    padding: 16px 20px;
+
+    border-bottom: 1px solid var(--border);
+}
+
+.sidebar-menu-title {
+    color: var(--muted-strong);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+}
+
+.menu-close {
+    display: grid;
+    place-items: center;
+
+    width: 40px;
+    height: 40px;
+
+    background: var(--purple-dark);
+    border: 1px solid rgba(183, 122, 255, 0.4);
+    border-radius: 11px;
+
+    color: var(--text);
+    font-size: 26px;
+    cursor: pointer;
+
+    transition: background var(--transition);
+}
+
+.menu-close:hover {
+    background: #352343;
+}
+
+.sidebar .sidebar-label {
+    display: block;
+    padding: 22px 20px 10px;
+    margin: 0;
+
+    color: var(--muted);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+}
+
+.sidebar .navigation {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 0 12px 24px;
+}
+
+.sidebar .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    width: 100%;
+    min-height: 46px;
+    padding: 11px 13px;
+    box-sizing: border-box;
+
+    color: var(--muted-strong);
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 11px;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    transition:
+        color var(--transition),
+        background var(--transition),
+        border-color var(--transition);
+}
+
+.sidebar .nav-link span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 22px;
+    flex: 0 0 22px;
+
+    color: var(--purple-soft);
+    font-size: 18px;
+    text-align: center;
+}
+
+.sidebar .nav-link:hover {
+    color: var(--text);
+    background: var(--panel-hover);
+    border-color: var(--border);
+}
+
+.sidebar .nav-link.active {
+    color: var(--accent);
+    background: linear-gradient(
+        100deg,
+        rgba(183, 255, 56, 0.11),
+        rgba(183, 255, 56, 0.025)
+    );
+    border-color: rgba(183, 255, 56, 0.25);
+}
+
+.sidebar .nav-link.active span {
+    color: var(--accent);
+}
+
+.sidebar .secondary-label {
+    margin-top: 12px;
+}
+
+/* Sidebar background overlay */
+.menu-backdrop {
+    position: fixed;
+    inset: 0;
+
+    background: rgba(0, 0, 0, 0.72);
+    backdrop-filter: blur(4px);
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+
+    z-index: 1001;
+
+    transition:
+        opacity 0.25s ease,
+        visibility 0.25s ease;
+}
+
+body.menu-open .menu-backdrop {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+/* Legacy overlay class: do not show a second overlay */
+.menu-overlay {
+    display: none !important;
+}
+
+/* 5. Footer */
+.page-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+
+    padding: 17px 34px;
+
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+
+    color: var(--muted);
+    font-size: 10px;
+}
+
+/* 6. Headings */
+.page-heading {
+    color: var(--text);
+    font-size: clamp(22px, 2.5vw, 30px);
+    font-weight: 800;
+    line-height: 1.3;
+    letter-spacing: -0.8px;
+}
+
+.page-subtitle {
+    margin-top: 7px;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.section-title {
+    color: var(--text);
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.section-subtitle {
+    margin-top: 4px;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.breadcrumb {
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.topbar h3 {
+    margin-top: 3px;
+    color: var(--text);
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: -0.4px;
+}
+
+/* 7. Cards and panels */
+.card {
+    min-width: 0;
+    padding: 22px;
+
+    background: linear-gradient(
+        145deg,
+        var(--panel-raised),
+        var(--panel)
+    );
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+
+    box-shadow: var(--shadow-card);
+
+    transition:
+        border-color var(--transition),
+        transform var(--transition),
+        box-shadow var(--transition);
+}
+
+.card:hover {
+    border-color: var(--border-hover);
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.card-label {
+    color: var(--muted-strong);
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.card-value {
+    margin-top: 8px;
+    color: var(--accent);
+    font-size: clamp(22px, 2.5vw, 30px);
+    font-weight: 800;
+    line-height: 1.3;
+    letter-spacing: -0.8px;
+    overflow-wrap: anywhere;
+}
+
+.card-note {
+    margin-top: 8px;
+    color: var(--muted);
+    font-size: 10px;
+}
+
+.metric-icon {
+    display: grid;
+    place-items: center;
+
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+
+    background: rgba(183, 122, 255, 0.12);
+    border: 1px solid rgba(183, 122, 255, 0.15);
+    border-radius: 12px;
+
+    color: var(--purple-soft);
+    font-size: 19px;
+}
+
+/* 8. Grid layouts */
+.grid {
+    display: grid;
+    gap: 18px;
+}
+
+.grid-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.grid-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.grid-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.section-gap {
+    margin-top: 24px;
+}
+
+/* 9. Buttons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    min-height: 40px;
+    padding: 10px 17px;
+
+    border: 1px solid transparent;
+    border-radius: 10px;
+
+    font-size: 12px;
+    font-weight: 700;
+    text-align: center;
+    cursor: pointer;
+
+    transition:
+        background var(--transition),
+        color var(--transition),
+        border-color var(--transition),
+        transform var(--transition),
+        box-shadow var(--transition);
+}
+
+.btn-primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #11150A;
+    box-shadow: 0 5px 20px rgba(183, 255, 56, 0.10);
+}
+
+.btn-primary:hover {
+    background: var(--accent-hover);
+    border-color: var(--accent-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(183, 255, 56, 0.18);
+}
+
+.btn-secondary {
+    background: var(--purple-dark);
+    border-color: var(--border-hover);
+    color: var(--text);
+}
+
+.btn-secondary:hover {
+    background: #352440;
+    border-color: var(--purple);
+}
+
+.btn:disabled,
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* 10. Forms */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 19px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    min-width: 0;
+}
+
+.form-group label {
+    color: var(--muted-strong);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.form-control,
+input.form-control,
+select.form-control,
+textarea.form-control {
+    width: 100%;
+    min-width: 0;
+    padding: 12px 13px;
+
+    background: #0E0C11;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+
+    outline: none;
+    color: var(--text);
+
+    transition:
+        border-color var(--transition),
+        box-shadow var(--transition);
+}
+
+.form-control::placeholder {
+    color: #77707F;
+}
+
+.form-control:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(183, 255, 56, 0.09);
+}
+
+.form-control option {
+    background: var(--panel);
+    color: var(--text);
+}
+
+.form-help {
+    color: var(--muted);
+    font-size: 10px;
+}
+
+input[type="checkbox"],
+input[type="radio"],
+input[type="range"] {
+    accent-color: var(--accent);
+}
+
+/* 11. Tables */
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    white-space: nowrap;
+}
+
+.data-table th {
+    padding: 14px;
+    background: var(--purple-dark);
+
+    color: var(--purple-soft);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    text-align: left;
+
+    border-bottom: 1px solid var(--border);
+}
+
+.data-table td {
+    padding: 13px 14px;
+    color: var(--muted-strong);
+    font-size: 11px;
+    border-bottom: 1px solid rgba(48, 40, 58, 0.75);
+}
+
+.data-table tbody tr {
+    transition: background var(--transition);
+}
+
+.data-table tbody tr:hover {
+    background: rgba(183, 122, 255, 0.055);
+}
+
+.data-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* 12. Badges */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+
+    padding: 5px 9px;
+    border: 1px solid transparent;
+    border-radius: 20px;
+
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.badge-green {
+    color: var(--accent);
+    background: rgba(183, 255, 56, 0.09);
+    border-color: rgba(183, 255, 56, 0.18);
+}
+
+.badge-purple {
+    color: var(--purple-soft);
+    background: rgba(183, 122, 255, 0.10);
+    border-color: rgba(183, 122, 255, 0.18);
+}
+
+.badge-orange {
+    color: var(--orange);
+    background: rgba(255, 191, 105, 0.09);
+    border-color: rgba(255, 191, 105, 0.18);
+}
+
+/* 13. Alerts */
+.alert {
+    padding: 14px 16px;
+    margin-bottom: 18px;
+    border: 1px solid transparent;
+    border-radius: 11px;
+    font-size: 12px;
+}
+
+.alert-success {
+    background: rgba(183, 255, 56, 0.07);
+    border-color: rgba(183, 255, 56, 0.22);
+    color: var(--accent);
+}
+
+.alert-error {
+    background: rgba(255, 113, 133, 0.08);
+    border-color: rgba(255, 113, 133, 0.25);
+    color: #FF9BAA;
+}
+
+/* 14. Prediction result */
+.prediction-result {
+    padding: 26px;
+
+    background: linear-gradient(
+        135deg,
+        rgba(183, 122, 255, 0.13),
+        rgba(183, 255, 56, 0.035)
+    );
+
+    border: 1px solid rgba(183, 122, 255, 0.30);
+    border-radius: var(--radius-lg);
+}
+
+.prediction-result .result-value {
+    margin-top: 8px;
+    color: var(--accent);
+    font-size: clamp(27px, 4vw, 38px);
+    font-weight: 800;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+}
+
+/* 15. Charts */
+.chart-container {
+    position: relative;
+    width: 100%;
+    min-width: 0;
+    height: 300px;
+}
+
+.chart-container canvas {
+    max-width: 100%;
+}
+
+/* 16. Empty states */
+.empty-state {
+    padding: 35px 20px;
+    text-align: center;
+
+    color: var(--muted);
+    background: rgba(255, 255, 255, 0.012);
+
+    border: 1px dashed var(--border-hover);
+    border-radius: var(--radius-md);
+}
+
+.empty-state h3 {
+    margin-bottom: 6px;
+    color: var(--text);
+}
+
+/* 17. Common utilities */
+hr {
+    border: 0;
+    border-top: 1px solid var(--border);
+}
+
+small,
+.text-muted {
+    color: var(--muted);
+}
+
+.text-accent {
+    color: var(--accent);
+}
+
+.text-purple {
+    color: var(--purple-soft);
+}
+
+/* Avoid a duplicate logo inside the dashboard */
+.dashboard-brand {
+    display: none !important;
+}
+
+/* 18. Tablet layout */
+@media (max-width: 1100px) {
+    .page-content {
+        padding: 26px 24px;
+    }
+
+    .grid-4 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .topbar {
+        padding-right: 22px;
+        padding-left: 22px;
+    }
+
+    .page-footer {
+        padding-right: 24px;
+        padding-left: 24px;
+    }
+}
+
+/* 19. Mobile layout */
+@media (max-width: 760px) {
+    .page-content {
+        padding: 21px 15px;
+    }
+
+    .topbar {
+        min-height: 66px;
+        padding: 11px 12px;
+        gap: 8px;
+    }
+
+    .menu-toggle {
+        width: 40px;
+        height: 40px;
+        flex-basis: 40px;
+    }
+
+    .topbar-brand {
+        gap: 6px;
+    }
+
+    .topbar-brand-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 9px;
+        font-size: 19px;
+    }
+
+    .topbar-brand-name {
+        font-size: 19px;
+        letter-spacing: -0.6px;
+    }
+
+    .topbar-right {
+        gap: 5px;
+    }
+
+    .topbar-right > span:not(.live-indicator),
+    .topbar-right .profile-avatar {
+        display: none;
+    }
+
+    .sidebar {
+        width: 275px;
+        max-width: 85vw;
+    }
+
+    .grid-2,
+    .grid-3,
+    .grid-4,
+    .form-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .card {
+        padding: 17px;
+        border-radius: 15px;
+    }
+
+    .card-header {
+        gap: 8px;
+    }
+
+    .chart-container {
+        height: 260px;
+    }
+
+    .page-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+        padding: 15px;
+    }
+
+    .page-heading {
+        font-size: 23px;
+    }
+
+    .prediction-result {
+        padding: 20px;
+    }
+}
+
+/* 20. Small mobile */
+@media (max-width: 380px) {
+    .topbar-brand-name {
+        font-size: 17px;
+    }
+
+    .topbar-brand-icon {
+        width: 29px;
+        height: 29px;
+        font-size: 17px;
+    }
+
+    .menu-toggle {
+        width: 36px;
+        height: 36px;
+        flex-basis: 36px;
+    }
+
+    .page-content {
+        padding-right: 12px;
+        padding-left: 12px;
+    }
+}
+
+/* 21. Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+
+/* ==========================================
+   HOMEMATE GLOBAL BUNGALOW BACKGROUND
+   Black + Purple + Neon Lime
+   ========================================== */
+
+   html {
+    min-height: 100%;
+    background: #08090B;
+}
+
+body {
+    position: relative;
+    isolation: isolate;
+    min-height: 100vh;
+    background: #08090B !important;
+    color: #F5F3F7;
+}
+
+/* Fixed background image shared by every page */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+
+    background-image:
+        linear-gradient(
+            180deg,
+            rgba(8, 9, 11, 0.25) 0%,
+            rgba(8, 9, 11, 0.35) 50%,
+            rgba(8, 9, 11, 0.45) 100%
+        ),
+        linear-gradient(
+            115deg,
+            rgba(36, 24, 47, 0.36),
+            rgba(8, 9, 11, 0.30)
+        ),
+        url("/static/images/home-bg.png");
+
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+
+    opacity: 0.65;
+    transform: scale(1.02);
+}
+
+/* Keep existing content above the background */
+body > * {
+    position: relative;
+}
+
+/* Preserve the HomeMate theme on common surfaces */
+.card,
+.stat-card,
+.doc-card,
+.timeline-content {
+    border-color: rgba(183, 122, 255, 0.22);
+}
+
+/* Subtle purple glass-like surface */
+.card,
+.stat-card,
+.doc-card,
+.timeline-content {
+    background-color: rgba(15, 13, 19, 0.76);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+/* Existing theme accents */
+.hm-doc .accent,
+.hm-doc .brand-name span {
+    color: #B77AFF;
+}
+
+.hm-doc .success {
+    color: #B7FF38;
+}
+
+/* Mobile background adjustment */
+@media (max-width: 768px) {
+    body::before {
+        background-position: center center;
+        opacity: 0.30;
+    }
+
+    .card,
+    .stat-card,
+    .doc-card,
+    .timeline-content {
+        backdrop-filter: blur(3px);
+        -webkit-backdrop-filter: blur(3px);
+    }
+}

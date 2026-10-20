@@ -1,0 +1,235 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#08090B">
+
+    <title>{% block title %}HomeMate{% endblock %}</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+<div class="app-layout">
+
+    <!-- Shared slide-out sidebar -->
+    <aside
+        class="sidebar"
+        id="appSidebar"
+        aria-label="Main navigation"
+        aria-hidden="true"
+        inert
+    >
+        <div class="sidebar-menu-header">
+            <span class="sidebar-menu-title">NAVIGATION</span>
+
+            <button
+                type="button"
+                id="closeMenu"
+                class="menu-close"
+                aria-label="Close navigation"
+            >&times;</button>
+        </div>
+
+        <div class="sidebar-label">WORKSPACE</div>
+
+        <nav class="navigation" aria-label="Workspace">
+
+            <a
+                href="{{ url_for('dashboard') }}"
+                class="nav-link {% if request.endpoint == 'dashboard' %}active{% endif %}"
+            >
+                <span aria-hidden="true">▦</span>
+                Dashboard
+            </a>
+
+            <a
+                href="{{ url_for('explore') }}"
+                class="nav-link {% if request.endpoint == 'explore' %}active{% endif %}"
+            >
+                <span aria-hidden="true">◫</span>
+                Explore Data
+            </a>
+
+            <a
+                href="{{ url_for('predict') }}"
+                class="nav-link {% if request.endpoint == 'predict' %}active{% endif %}"
+            >
+                <span aria-hidden="true">⌕</span>
+                Price Prediction
+            </a>
+
+            <a
+                href="{{ url_for('comparison') }}"
+                class="nav-link {% if request.endpoint == 'comparison' %}active{% endif %}"
+            >
+                <span aria-hidden="true">⇄</span>
+                Model Comparison
+            </a>
+
+            <a
+                href="{{ url_for('performance') }}"
+                class="nav-link {% if request.endpoint == 'performance' %}active{% endif %}"
+            >
+                <span aria-hidden="true">▥</span>
+                Performance
+            </a>
+
+            <div class="sidebar-label secondary-label">GENERAL</div>
+
+            <a
+                href="{{ url_for('about') }}"
+                class="nav-link {% if request.endpoint == 'about' %}active{% endif %}"
+            >
+                <span aria-hidden="true">ⓘ</span>
+                About Project
+            </a>
+
+        </nav>
+    </aside>
+
+    <!-- Single backdrop for the sidebar -->
+    <div
+        class="menu-backdrop"
+        id="menuBackdrop"
+        aria-hidden="true"
+    ></div>
+
+    <!-- Main application -->
+    <main class="main-content">
+
+        <header class="topbar">
+
+            <!-- Hamburger -->
+            <button
+                type="button"
+                id="menuToggle"
+                class="menu-toggle"
+                aria-label="Open navigation"
+                aria-expanded="false"
+                aria-controls="appSidebar"
+            >
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <!-- Centered HomeMate logo -->
+            <a
+                href="{{ url_for('dashboard') }}"
+                class="topbar-brand"
+                aria-label="HomeMate Dashboard"
+            >
+                <span class="topbar-brand-icon">H</span>
+                <span class="topbar-brand-name">Home<span>Mate</span></span>
+            </a>
+
+            <!-- Right side status -->
+            <div class="topbar-right">
+                <span class="live-indicator" aria-hidden="true"></span>
+                <span>Analytics Workspace</span>
+                <div class="profile-avatar" aria-label="HomeMate">HM</div>
+            </div>
+
+        </header>
+
+        <!-- Every page extending base.html renders here -->
+        <section class="page-content">
+            {% block content %}{% endblock %}
+        </section>
+
+        <footer class="page-footer">
+            <span>HomeMate © 2026</span>
+            <span>House Price Prediction · Machine Learning</span>
+        </footer>
+
+    </main>
+</div>
+
+<!-- Existing shared JavaScript -->
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+
+<!-- Single navigation controller -->
+<script>
+(function () {
+    "use strict";
+
+    const toggle = document.getElementById("menuToggle");
+    const sidebar = document.getElementById("appSidebar");
+    const backdrop = document.getElementById("menuBackdrop");
+    const closeButton = document.getElementById("closeMenu");
+
+    if (!toggle || !sidebar || !backdrop || !closeButton) {
+        console.error("HomeMate: navigation elements are missing.");
+        return;
+    }
+
+    function setMenu(open) {
+        document.body.classList.toggle("menu-open", open);
+
+        toggle.setAttribute("aria-expanded", String(open));
+        toggle.setAttribute(
+            "aria-label",
+            open ? "Close navigation" : "Open navigation"
+        );
+
+        sidebar.setAttribute("aria-hidden", String(!open));
+        sidebar.inert = !open;
+    }
+
+    toggle.addEventListener("click", function () {
+        const isOpen = document.body.classList.contains("menu-open");
+
+        setMenu(!isOpen);
+
+        if (!isOpen) {
+            closeButton.focus();
+        }
+    });
+
+    closeButton.addEventListener("click", function () {
+        setMenu(false);
+        toggle.focus();
+    });
+
+    backdrop.addEventListener("click", function () {
+        setMenu(false);
+        toggle.focus();
+    });
+
+    sidebar.querySelectorAll("a.nav-link").forEach(function (link) {
+        link.addEventListener("click", function () {
+            setMenu(false);
+        });
+    });
+
+    document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") {
+            setMenu(false);
+        }
+    });
+
+    // Start closed on every page.
+    setMenu(false);
+})();
+</script>
+
+{% block scripts %}{% endblock %}
+
+</body>
+</html>

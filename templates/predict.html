@@ -1,0 +1,915 @@
+
+{% extends "base.html" %}
+
+{% block title %}AI Price Prediction | HomeMate{% endblock %}
+{% block page_heading %}Property Price Prediction{% endblock %}
+
+{% block content %}
+
+<style>
+/* ==========================================
+   HomeMate - AI Price Prediction
+   Official Theme: Black | Purple | Neon Lime
+   ========================================== */
+
+.prediction-page {
+    --hm-black: #08090B;
+    --hm-purple: #24182F;
+    --hm-lime: #B7FF38;
+    --hm-soft-purple: #B77AFF;
+    --hm-white: #F5F5F5;
+    --hm-muted: #A9A2B5;
+    --hm-border: rgba(183, 122, 255, 0.20);
+    --hm-card: #100D14;
+    --hm-input: #0C0B10;
+
+    color: var(--hm-white);
+    padding-bottom: 32px;
+}
+
+/* HERO */
+
+.prediction-hero {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    padding: 32px;
+    margin-bottom: 24px;
+    border: 1px solid var(--hm-border);
+    border-radius: 22px;
+    background:
+        radial-gradient(
+            ellipse at 95% 5%,
+            rgba(183, 122, 255, 0.17),
+            transparent 42%
+        ),
+        linear-gradient(
+            135deg,
+            #15101B 0%,
+            #0C0B10 65%,
+            #171020 100%
+        );
+}
+
+.prediction-hero::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    width: 190px;
+    height: 190px;
+    right: -65px;
+    bottom: -110px;
+    border: 1px solid rgba(183, 122, 255, 0.22);
+    border-radius: 50%;
+    box-shadow:
+        0 0 0 22px rgba(183, 122, 255, 0.035),
+        0 0 0 44px rgba(183, 122, 255, 0.025);
+    pointer-events: none;
+}
+
+.prediction-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 8px 13px;
+    border: 1px solid rgba(183, 255, 56, 0.25);
+    border-radius: 999px;
+    background: rgba(183, 255, 56, 0.07);
+    color: var(--hm-lime);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.prediction-eyebrow .status-dot {
+    width: 7px;
+    height: 7px;
+    background: var(--hm-lime);
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(183, 255, 56, 0.6);
+}
+
+.prediction-hero h1 {
+    margin: 20px 0 12px;
+    font-size: clamp(27px, 3vw, 39px);
+    line-height: 1.2;
+    font-weight: 850;
+    letter-spacing: -1px;
+    color: var(--hm-white);
+}
+
+.prediction-hero h1 span {
+    color: var(--hm-lime);
+}
+
+.prediction-hero p {
+    max-width: 610px;
+    margin: 0;
+    color: var(--hm-muted);
+    line-height: 1.8;
+    font-size: 14px;
+}
+
+/* MAIN LAYOUT */
+
+.prediction-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(240px, 0.8fr);
+    gap: 22px;
+    align-items: stretch;
+}
+
+.prediction-form-card,
+.prediction-info-card,
+.prediction-result-card,
+.prediction-error-card {
+    border: 1px solid var(--hm-border);
+    border-radius: 20px;
+    background: linear-gradient(
+        145deg,
+        #15101B 0%,
+        #0D0B11 100%
+    );
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.18);
+}
+
+.prediction-form-card {
+    padding: 27px;
+}
+
+/* SECTION HEADINGS */
+
+.prediction-section-heading {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 27px;
+}
+
+.prediction-icon-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 47px;
+    height: 47px;
+    border: 1px solid rgba(183, 255, 56, 0.20);
+    border-radius: 14px;
+    background: rgba(183, 255, 56, 0.07);
+    color: var(--hm-lime);
+    font-size: 22px;
+}
+
+.prediction-section-heading h2 {
+    margin: 0 0 7px;
+    font-size: 19px;
+    font-weight: 800;
+    color: var(--hm-white);
+}
+
+.prediction-section-heading p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--hm-muted);
+}
+
+/* FORM GRID */
+
+.prediction-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 23px 18px;
+}
+
+.prediction-field {
+    min-width: 0;
+}
+
+.prediction-field label {
+    display: block;
+    margin-bottom: 10px;
+    color: #EDE8F2;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.prediction-field .field-icon {
+    margin-right: 7px;
+    color: var(--hm-lime);
+}
+
+/* INPUTS */
+
+.prediction-field input,
+.prediction-field select {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 49px;
+    padding: 12px 14px;
+    border: 1px solid rgba(183, 122, 255, 0.19);
+    border-radius: 11px;
+    outline: none;
+    background: var(--hm-input);
+    color: var(--hm-white);
+    font-family: inherit;
+    font-size: 14px;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+.prediction-field input::placeholder {
+    color: #797181;
+}
+
+.prediction-field select option {
+    background: #15101B;
+    color: #FFFFFF;
+}
+
+.prediction-field input:hover,
+.prediction-field select:hover {
+    border-color: rgba(183, 122, 255, 0.48);
+}
+
+.prediction-field input:focus,
+.prediction-field select:focus {
+    border-color: var(--hm-lime);
+    background: #100F12;
+    box-shadow: 0 0 0 3px rgba(183, 255, 56, 0.09);
+}
+
+.prediction-field small {
+    display: block;
+    margin-top: 8px;
+    color: #92899E;
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+/* SUBMIT BUTTON */
+
+.prediction-submit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 53px;
+    margin-top: 27px;
+    padding: 14px 20px;
+    border: 1px solid var(--hm-lime);
+    border-radius: 12px;
+    background: var(--hm-lime);
+    color: #10120B;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 850;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(183, 255, 56, 0.10);
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+.prediction-submit:hover {
+    transform: translateY(-2px);
+    background: #C6FF69;
+    box-shadow: 0 10px 26px rgba(183, 255, 56, 0.20);
+}
+
+.prediction-submit:active {
+    transform: translateY(0);
+}
+
+.prediction-submit:focus-visible {
+    outline: 2px solid var(--hm-soft-purple);
+    outline-offset: 4px;
+}
+
+/* INFORMATION CARD */
+
+.prediction-info-card {
+    position: relative;
+    overflow: hidden;
+    padding: 25px;
+}
+
+.prediction-info-card h3 {
+    margin: 18px 0 10px;
+    font-size: 18px;
+    color: var(--hm-white);
+    font-weight: 800;
+}
+
+.prediction-info-card > p {
+    margin: 0;
+    color: var(--hm-muted);
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+.prediction-feature-list {
+    display: grid;
+    gap: 22px;
+    margin-top: 29px;
+}
+
+.prediction-feature {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.prediction-feature-icon {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 37px;
+    height: 37px;
+    border: 1px solid rgba(183, 122, 255, 0.16);
+    border-radius: 11px;
+    background: rgba(183, 122, 255, 0.09);
+    color: var(--hm-soft-purple);
+    font-size: 16px;
+}
+
+.prediction-feature strong {
+    display: block;
+    margin: 1px 0 6px;
+    color: #F4EFF9;
+    font-size: 13px;
+    font-weight: 750;
+}
+
+.prediction-feature span {
+    display: block;
+    color: var(--hm-muted);
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+.prediction-info-note {
+    margin-top: 28px;
+    padding: 14px;
+    border: 1px solid rgba(183, 255, 56, 0.17);
+    border-radius: 12px;
+    background: rgba(183, 255, 56, 0.045);
+    color: #C7EFA0;
+    font-size: 12px;
+    line-height: 1.8;
+}
+
+/* DISCLAIMER */
+
+.prediction-disclaimer {
+    margin-top: 18px;
+    color: #92899E;
+    font-size: 11px;
+    line-height: 1.8;
+}
+
+/* RESULT CARD */
+
+.prediction-result-card {
+    position: relative;
+    overflow: hidden;
+    margin-top: 23px;
+    padding: 28px;
+    background:
+        radial-gradient(
+            ellipse at 95% 0%,
+            rgba(183, 122, 255, 0.15),
+            transparent 45%
+        ),
+        linear-gradient(145deg, #171020, #0D0B11);
+    animation: hm-result-enter 0.45s ease-out both;
+}
+
+.prediction-result-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: var(--hm-lime);
+    font-size: 12px;
+    font-weight: 850;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.prediction-result-card h2 {
+    margin: 13px 0;
+    font-size: 18px;
+    color: var(--hm-white);
+}
+
+.prediction-result-price {
+    overflow-wrap: anywhere;
+    margin: 14px 0;
+    color: var(--hm-lime);
+    font-size: clamp(30px, 4vw, 44px);
+    font-weight: 900;
+    letter-spacing: -1px;
+}
+
+.prediction-result-card p {
+    margin: 0;
+    color: var(--hm-muted);
+    font-size: 12px;
+    line-height: 1.8;
+}
+
+.prediction-result-divider {
+    height: 1px;
+    margin: 21px 0;
+    background: rgba(183, 122, 255, 0.20);
+}
+
+/* RESULT PRINT BUTTON */
+
+.prediction-result-card .prediction-print-button {
+    width: auto;
+    max-width: 220px;
+    margin-top: 22px;
+    border-color: var(--hm-soft-purple);
+    background: transparent;
+    color: var(--hm-soft-purple);
+    box-shadow: none;
+}
+
+.prediction-result-card .prediction-print-button:hover {
+    background: rgba(183, 122, 255, 0.10);
+    box-shadow: 0 8px 20px rgba(183, 122, 255, 0.10);
+}
+
+/* ERROR CARD */
+
+.prediction-error-card {
+    margin-top: 21px;
+    padding: 19px 21px;
+    border-color: rgba(248, 113, 113, 0.28);
+    background: rgba(127, 29, 29, 0.12);
+    color: #FECACA;
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.prediction-error-card strong {
+    color: #FCA5A5;
+}
+
+.prediction-error-card p {
+    margin: 7px 0 0;
+}
+
+/* ANIMATION */
+
+@keyframes hm-result-enter {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 1000px) {
+    .prediction-layout {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .prediction-info-card {
+        padding: 23px;
+    }
+
+    .prediction-feature-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 600px) {
+    .prediction-hero {
+        padding: 22px;
+        border-radius: 17px;
+    }
+
+    .prediction-hero h1 {
+        font-size: 28px;
+        letter-spacing: -0.6px;
+    }
+
+    .prediction-form-card {
+        padding: 19px;
+    }
+
+    .prediction-form-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 19px;
+    }
+
+    .prediction-section-heading h2 {
+        font-size: 17px;
+    }
+
+    .prediction-feature-list {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .prediction-result-card {
+        padding: 22px;
+    }
+
+    .prediction-result-price {
+        font-size: 32px;
+    }
+
+    .prediction-submit {
+        font-size: 13px;
+    }
+}
+
+/* ACCESSIBILITY */
+
+@media (prefers-reduced-motion: reduce) {
+    .prediction-page *,
+    .prediction-page *::before,
+    .prediction-page *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* PRINT */
+
+@media print {
+    body * {
+        visibility: hidden !important;
+    }
+
+    .prediction-result-card,
+    .prediction-result-card * {
+        visibility: visible !important;
+    }
+
+    .prediction-result-card {
+        position: absolute;
+        inset: 20px;
+        margin: 0;
+        color: #111111 !important;
+        background: #FFFFFF !important;
+        border: 1px solid #CCCCCC !important;
+        box-shadow: none !important;
+        animation: none !important;
+    }
+
+    .prediction-result-card h2,
+    .prediction-result-card p,
+    .prediction-result-price,
+    .prediction-result-label {
+        color: #111111 !important;
+    }
+
+    .prediction-result-divider {
+        background: #CCCCCC !important;
+    }
+
+    .prediction-result-card button {
+        display: none !important;
+    }
+}
+</style>
+
+<div class="prediction-page">
+
+    <!-- HERO -->
+    <section class="prediction-hero">
+
+        <span class="prediction-eyebrow">
+            <span class="status-dot"></span>
+            AI-powered valuation
+        </span>
+
+        <h1>Find the Value of Your <span>Property</span></h1>
+
+        <p>
+            Discover an estimated property price using HomeMate's
+            machine learning models. Enter your property details below
+            to get started.
+        </p>
+
+    </section>
+
+    <!-- FORM AND INFORMATION -->
+    <div class="prediction-layout">
+
+        <!-- PROPERTY FORM -->
+        <section class="prediction-form-card">
+
+            <div class="prediction-section-heading">
+
+                <div class="prediction-icon-box" aria-hidden="true">
+                    &#8962;
+                </div>
+
+                <div>
+                    <h2>Property Details</h2>
+                    <p>
+                        Provide the basic details for your price estimate.
+                    </p>
+                </div>
+
+            </div>
+
+            <form method="POST"
+                  action="{{ url_for('predict') }}"
+                  id="predictionForm">
+
+                <div class="prediction-form-grid">
+
+                    <!-- CITY -->
+                    <div class="prediction-field">
+
+                        <label for="city">
+                            <span class="field-icon">&#9673;</span>
+                            City
+                        </label>
+
+                        <select id="city" name="city" required>
+
+                            <option value="">Select your city</option>
+
+                            {% for city in cities %}
+                            <option value="{{ city }}"
+                                {% if request.form.get('city') == city %}
+                                    selected
+                                {% endif %}>
+                                {{ city }}
+                            </option>
+                            {% endfor %}
+
+                        </select>
+
+                        <small>
+                            Choose a city available in the dataset.
+                        </small>
+
+                    </div>
+
+                    <!-- PROPERTY TYPE -->
+                    <div class="prediction-field">
+
+                        <label for="property_type">
+                            <span class="field-icon">&#127968;</span>
+                            Property Type
+                        </label>
+
+                        <select id="property_type"
+                                name="property_type"
+                                required>
+
+                            <option value="">Select property type</option>
+
+                            {% for item in property_types %}
+                            <option value="{{ item }}"
+                                {% if request.form.get('property_type', property_types[0] if property_types else '') == item %}
+                                    selected
+                                {% endif %}>
+                                {{ item }}
+                            </option>
+                            {% endfor %}
+
+                        </select>
+
+                        <small>
+                            Choose the closest matching category.
+                        </small>
+
+                    </div>
+
+                    <!-- PROPERTY AREA -->
+                    <div class="prediction-field">
+
+                        <label for="size">
+                            <span class="field-icon">&#8596;</span>
+                            Property Area
+                        </label>
+
+                        <input
+                            id="size"
+                            name="size"
+                            type="number"
+                            min="100"
+                            max="50000"
+                            step="1"
+                            placeholder="e.g. 1200"
+                            value="{{ request.form.get('size', '') }}"
+                            required
+                        >
+
+                        <small>
+                            Enter the area in square feet (sq. ft.).
+                        </small>
+
+                    </div>
+
+                    <!-- BHK -->
+                    <div class="prediction-field">
+
+                        <label for="bhk">
+                            <span class="field-icon">&#9638;</span>
+                            Number of BHK
+                        </label>
+
+                        <select id="bhk" name="bhk" required>
+
+                            {% for value, label in [
+                                (1, '1 BHK'),
+                                (2, '2 BHK'),
+                                (3, '3 BHK'),
+                                (4, '4 BHK'),
+                                (5, '5+ BHK')
+                            ] %}
+
+                            <option value="{{ value }}"
+                                {% if request.form.get('bhk', '2')|int == value %}
+                                    selected
+                                {% endif %}>
+                                {{ label }}
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                        <small>
+                            Select the number of bedrooms.
+                        </small>
+
+                    </div>
+
+                </div>
+
+                <!-- SUBMIT -->
+                <button type="submit" class="prediction-submit">
+                    <span aria-hidden="true">&#10024;</span>
+                    Estimate Property Price
+                    <span aria-hidden="true">&#8594;</span>
+                </button>
+
+                <p class="prediction-disclaimer">
+                    Your estimate is based on the selected property details
+                    and the available trained model.
+                </p>
+
+            </form>
+
+        </section>
+
+        <!-- INFORMATION CARD -->
+        <aside class="prediction-info-card">
+
+            <div class="prediction-icon-box" aria-hidden="true">
+                &#10024;
+            </div>
+
+            <h3>Smarter Property Insights</h3>
+
+            <p>
+                HomeMate uses machine learning to estimate property values
+                from patterns in the available property dataset.
+            </p>
+
+            <div class="prediction-feature-list">
+
+                <div class="prediction-feature">
+
+                    <div class="prediction-feature-icon"
+                         aria-hidden="true">
+                        &#9881;
+                    </div>
+
+                    <div>
+                        <strong>ML-powered estimates</strong>
+                        <span>
+                            Predictions generated by a trained model.
+                        </span>
+                    </div>
+
+                </div>
+
+                <div class="prediction-feature">
+
+                    <div class="prediction-feature-icon"
+                         aria-hidden="true">
+                        &#9634;
+                    </div>
+
+                    <div>
+                        <strong>Property-based inputs</strong>
+                        <span>
+                            Area, city, property type and BHK.
+                        </span>
+                    </div>
+
+                </div>
+
+                <div class="prediction-feature">
+
+                    <div class="prediction-feature-icon"
+                         aria-hidden="true">
+                        &#128200;
+                    </div>
+
+                    <div>
+                        <strong>Quick results</strong>
+                        <span>
+                            Get an estimate after submitting the form.
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="prediction-info-note">
+                &#10003; Use the estimate as a starting point when
+                comparing properties, not as a guaranteed market price.
+            </div>
+
+        </aside>
+
+    </div>
+
+    <!-- PREDICTION RESULT -->
+    {% if prediction is not none %}
+
+    <section class="prediction-result-card" aria-live="polite">
+
+        <span class="prediction-result-label">
+            &#10003; Prediction complete
+        </span>
+
+        <h2>Estimated Property Price</h2>
+
+        <div class="prediction-result-price">
+
+            {% if prediction >= 10000000 %}
+                &#8377;{{ "{:,.2f}".format(prediction / 10000000) }} Cr
+            {% elif prediction >= 100000 %}
+                &#8377;{{ "{:,.2f}".format(prediction / 100000) }} L
+            {% else %}
+                &#8377;{{ "{:,.0f}".format(prediction) }}
+            {% endif %}
+
+        </div>
+
+        <div class="prediction-result-divider"></div>
+
+        <p>
+            This estimate is generated by the selected machine learning
+            model using your submitted property details.
+        </p>
+
+        <p style="margin-top: 8px;">
+            Actual market prices may vary by location, property condition,
+            amenities and other factors.
+        </p>
+
+        <button
+            type="button"
+            class="prediction-submit prediction-print-button"
+            onclick="window.print()">
+            &#128424; Print Result
+        </button>
+
+    </section>
+
+    {% endif %}
+
+    <!-- ERROR MESSAGE -->
+    {% if error_message %}
+
+    <div class="prediction-error-card" role="alert">
+
+        <strong>Unable to generate prediction</strong>
+
+        <p>{{ error_message }}</p>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

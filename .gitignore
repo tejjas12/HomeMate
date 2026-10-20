@@ -1,0 +1,10 @@
+
+.DS_Store
+.env
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+Dataset/Makaan_Properties_Buy.csv

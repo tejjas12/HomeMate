@@ -1,0 +1,425 @@
+
+{% extends "base.html" %}
+
+{% block title %}Dashboard | HomeMate{% endblock %}
+{% block page_heading %}Real Estate Dashboard{% endblock %}
+
+{% block content %}
+<style>
+.dashboard-page {
+    --lime: #B7FF38;
+    --purple: #B77AFF;
+    --muted: #A29AAA;
+    color: #F5F3F7;
+    width: 100%;
+}
+.dashboard-page * { box-sizing: border-box; }
+.dashboard-page .brand {
+    display:flex; justify-content:center; align-items:center;
+    gap:12px; margin:10px 0 30px;
+}
+.dashboard-page .brand-icon {
+    display:grid; place-items:center; width:48px; height:48px;
+    border-radius:14px; background:var(--lime); color:#08090B;
+    font-size:28px; font-weight:900;
+}
+.dashboard-page .brand-name { font-size:30px; font-weight:850; }
+.dashboard-page .brand-name span { color:var(--lime); }
+.dashboard-page .muted { color:var(--muted); font-size:12px; }
+.dashboard-page .intro {
+    display:flex; justify-content:space-between; align-items:center;
+    gap:12px; flex-wrap:wrap; margin-bottom:22px;
+}
+.dashboard-page h1 { font-size:clamp(25px,3vw,34px); margin:0 0 8px; }
+.dashboard-page h2 { font-size:16px; margin:0 0 6px; }
+.dashboard-page p { line-height:1.6; }
+.dashboard-page .badge {
+    border:1px solid #51405F; border-radius:30px; padding:8px 12px;
+    color:var(--lime); font-size:12px;
+}
+.dashboard-page .grid {
+    display:grid; gap:16px; margin-bottom:22px;
+}
+.dashboard-page .grid-4 { grid-template-columns:repeat(4,minmax(0,1fr)); }
+.dashboard-page .grid-2 { grid-template-columns:repeat(2,minmax(0,1fr)); }
+.dashboard-page .card {
+    min-width:0; padding:20px; border:1px solid #30283A;
+    border-radius:16px; background:rgba(18,16,22,.94);
+}
+.dashboard-page .kpi {
+    width:100%; text-align:left; color:inherit; cursor:pointer;
+    font:inherit; transition:border-color .2s,transform .2s;
+}
+.dashboard-page .kpi:hover { border-color:var(--lime); transform:translateY(-2px); }
+.dashboard-page .kpi-label { color:var(--muted); font-size:12px; }
+.dashboard-page .value {
+    margin-top:15px; font-size:clamp(22px,2.5vw,30px);
+    font-weight:800; overflow-wrap:anywhere;
+}
+.dashboard-page .kpi p { margin-bottom:0; }
+.dashboard-page .card-head {
+    display:flex; justify-content:space-between; align-items:flex-start;
+    gap:10px; flex-wrap:wrap;
+}
+.dashboard-page .chart-tools {
+    display:flex; align-items:center; justify-content:space-between;
+    flex-wrap:wrap; gap:10px; margin-top:15px;
+}
+.dashboard-page select,
+.dashboard-page button.chart-reset {
+    border:1px solid #40334B; border-radius:8px;
+    background:#0C0B10; color:#F5F3F7; padding:9px 11px;
+}
+.dashboard-page button.chart-reset { cursor:pointer; }
+.dashboard-page .chart-wrap { position:relative; height:300px; margin-top:18px; }
+.dashboard-page .chart-wrap.doughnut { height:310px; }
+.dashboard-page .table-wrap { overflow-x:auto; }
+.dashboard-page table { width:100%; border-collapse:collapse; }
+.dashboard-page th,.dashboard-page td {
+    padding:12px; border-bottom:1px solid #30283A;
+    text-align:left; font-size:12px;
+}
+.dashboard-page th { color:var(--muted); }
+.dashboard-page .quick-actions { display:grid; gap:10px; }
+.dashboard-page .quick-action {
+    display:flex; align-items:center; gap:12px; padding:14px;
+    border:1px solid #30283A; border-radius:12px;
+    background:#15121A; color:inherit; text-decoration:none;
+}
+.dashboard-page .quick-action:hover { border-color:var(--purple); }
+.dashboard-page .quick-action p { margin:5px 0 0; }
+.dashboard-page .action-button {
+    display:inline-block; margin-top:14px; padding:10px 12px;
+    border-radius:9px; background:var(--lime); color:#08090B;
+    font-weight:750; text-decoration:none;
+}
+.hm-modal {
+    display:none; position:fixed; inset:0; z-index:9999;
+    align-items:center; justify-content:center; padding:20px;
+    background:rgba(0,0,0,.78); backdrop-filter:blur(6px);
+}
+.hm-modal.open { display:flex; }
+.hm-modal-card {
+    width:min(460px,100%); padding:24px; border-radius:16px;
+    border:1px solid var(--purple); background:#15121A; color:#F5F3F7;
+}
+.hm-modal-head { display:flex; justify-content:space-between; gap:12px; }
+.hm-modal-card h2 { margin:0; }
+.hm-modal-close {
+    background:#30283A; color:white; border:0; border-radius:8px;
+    padding:5px 12px; cursor:pointer; font-size:22px;
+}
+.hm-modal-value { font-size:28px; font-weight:800; margin:22px 0 10px; }
+.hm-modal-description { color:#C8C0D0; line-height:1.7; font-size:13px; }
+.hm-modal-done {
+    margin-top:18px; padding:10px 15px; border:0; border-radius:8px;
+    background:var(--lime); color:#08090B; font-weight:750; cursor:pointer;
+}
+@media(max-width:1000px) {
+    .dashboard-page .grid-4 { grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+@media(max-width:700px) {
+    .dashboard-page .grid-2 { grid-template-columns:1fr; }
+    .dashboard-page .card { padding:15px; }
+    .dashboard-page .chart-wrap,.dashboard-page .chart-wrap.doughnut { height:260px; }
+}
+@media(max-width:420px) {
+    .dashboard-page .grid-4 { grid-template-columns:1fr; }
+}
+</style>
+
+<div class="dashboard-page">
+    <div class="intro">
+        <div>
+            <h1>Market Overview</h1>
+            <p class="muted">Explore residential property prices across Indian cities.</p>
+        </div>
+        <span class="badge">● ML Analytics</span>
+    </div>
+
+    <div class="grid grid-4">
+        <button type="button" class="card kpi" data-detail="properties">
+            <div class="kpi-label">Properties Analyzed</div>
+            <div class="value">{{ "{:,}".format(total_properties|default(0,true)|int) }}</div>
+            <p class="muted">Total records in loaded dataset</p>
+        </button>
+        <button type="button" class="card kpi" data-detail="median">
+            <div class="kpi-label">Median Property Price</div>
+            <div class="value" id="medianValue">₹{{ "{:,.0f}".format(median_price|default(0,true)|float) }}</div>
+            <p class="muted">Median listing value</p>
+        </button>
+        <button type="button" class="card kpi" data-detail="cities">
+            <div class="kpi-label">Cities Covered</div>
+            <div class="value">{{ total_cities|default(0,true)|int }}</div>
+            <p class="muted">Unique cities in dataset</p>
+        </button>
+        <button type="button" class="card kpi" data-detail="r2">
+            <div class="kpi-label">Best Model R²</div>
+            <div class="value">{{ "%.2f"|format(best_r2|default(0,true)|float) }}%</div>
+            <p class="muted">Saved evaluation report</p>
+        </button>
+    </div>
+
+    <div class="grid grid-2">
+        <section class="card">
+            <div class="card-head">
+                <div>
+                    <h2>City-wise Property Prices</h2>
+                    <p class="muted">Median prices across cities</p>
+                </div>
+                <span class="badge">City Analysis</span>
+            </div>
+            <div class="chart-tools">
+                <label class="muted" for="cityFilter">City
+                    <select id="cityFilter"><option value="__all__">All cities</option></select>
+                </label>
+                <button type="button" class="chart-reset" id="resetCity">Reset</button>
+            </div>
+            <div class="chart-wrap"><canvas id="cityChart"></canvas></div>
+            <p class="muted">Click a bar to view details.</p>
+            <div id="cityEmpty" class="muted" hidden>No city price data found.</div>
+        </section>
+
+        <section class="card">
+            <div class="card-head">
+                <div>
+                    <h2>Property Type Distribution</h2>
+                    <p class="muted">Property categories in the dataset</p>
+                </div>
+                <span class="badge">Dataset</span>
+            </div>
+            <div class="chart-tools">
+                <label class="muted" for="typeFilter">Category
+                    <select id="typeFilter"><option value="__all__">All categories</option></select>
+                </label>
+                <button type="button" class="chart-reset" id="resetType">Reset</button>
+            </div>
+            <div class="chart-wrap doughnut"><canvas id="typeChart"></canvas></div>
+            <p class="muted">Click a segment to view details.</p>
+            <div id="typeEmpty" class="muted" hidden>No property type data found.</div>
+        </section>
+    </div>
+
+    <div class="grid grid-2">
+        <section class="card">
+            <h2>Machine Learning Models</h2>
+            <p class="muted">Saved evaluation metrics</p>
+            <div class="table-wrap">
+                <table>
+                    <thead><tr><th>MODEL</th><th>R² SCORE</th><th>MAE</th></tr></thead>
+                    <tbody>
+                    {% if model_comparison %}
+                        {% for model in model_comparison %}
+                        <tr>
+                            <td>{{ model.get("Model",model.get("model",model.get("Algorithm","Unknown"))) }}</td>
+                            <td>
+                                {% set score = model.get("R2",model.get("R2 Score",model.get("r2",none))) %}
+                                {% if score is not none %}
+                                    {% set n = score|float %}
+                                    {{ "%.2f"|format(n*100 if n|abs <= 1 else n) }}%
+                                {% else %}N/A{% endif %}
+                            </td>
+                            <td>
+                                {% set mae = model.get("MAE",model.get("mae",none)) %}
+                                {% if mae is not none %}₹{{ "{:,.0f}".format(mae|float|abs) }}{% else %}N/A{% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr><td colspan="3">Model evaluation report is not available yet.</td></tr>
+                    {% endif %}
+                    </tbody>
+                </table>
+            </div>
+            <a class="action-button" href="{{ url_for('comparison') }}">Compare Models →</a>
+        </section>
+
+        <section class="card">
+            <h2>Quick Actions</h2>
+            <p class="muted">Jump to any HomeMate feature</p>
+            <div class="quick-actions">
+                <a class="quick-action" href="{{ url_for('predict') }}">₹ <span><strong>Predict Property Price</strong><p class="muted">Estimate a property's market value</p></span> →</a>
+                <a class="quick-action" href="{{ url_for('explore') }}">▥ <span><strong>Explore Dataset</strong><p class="muted">Discover property trends</p></span> →</a>
+                <a class="quick-action" href="{{ url_for('comparison') }}">⇄ <span><strong>Model Comparison</strong><p class="muted">Review evaluation metrics</p></span> →</a>
+                <a class="quick-action" href="{{ url_for('performance') }}">▤ <span><strong>Model Performance</strong><p class="muted">View prediction charts</p></span> →</a>
+            </div>
+        </section>
+    </div>
+</div>
+
+<div class="hm-modal" id="detailsModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="hm-modal-card">
+        <div class="hm-modal-head">
+            <h2 id="modalTitle">Dashboard Details</h2>
+            <button type="button" class="hm-modal-close" id="modalClose" aria-label="Close">×</button>
+        </div>
+        <div class="hm-modal-value" id="modalValue"></div>
+        <div class="hm-modal-description" id="modalDescription"></div>
+        <button type="button" class="hm-modal-done" id="modalDone">Done</button>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+(() => {
+    "use strict";
+
+    const cityLabels = {{ chart_cities|default([],true)|tojson }};
+    const cityPrices = {{ chart_prices|default([],true)|tojson }};
+    const typeLabels = {{ property_labels|default([],true)|tojson }};
+    const typeCounts = {{ property_counts|default([],true)|tojson }};
+    const totalProperties = {{ total_properties|default(0,true)|int|tojson }};
+    const medianPrice = {{ median_price|default(0,true)|float|tojson }};
+    const totalCities = {{ total_cities|default(0,true)|int|tojson }};
+    const bestR2 = {{ best_r2|default(0,true)|float|tojson }};
+
+    const modal = document.getElementById("detailsModal");
+    const money = n => "₹" + Number(n || 0).toLocaleString("en-IN", {maximumFractionDigits:0});
+    const fmt = n => Number(n || 0).toLocaleString("en-IN");
+    const compact = n => "₹" + new Intl.NumberFormat("en-IN", {notation:"compact",maximumFractionDigits:1}).format(Number(n || 0));
+
+    function openModal(title, value, description) {
+        document.getElementById("modalTitle").textContent = title;
+        document.getElementById("modalValue").textContent = value;
+        document.getElementById("modalDescription").textContent = description;
+        modal.classList.add("open");
+    }
+    function closeModal() { modal.classList.remove("open"); }
+
+    document.getElementById("modalClose").addEventListener("click", closeModal);
+    document.getElementById("modalDone").addEventListener("click", closeModal);
+    modal.addEventListener("click", e => { if (e.target === modal) closeModal(); });
+    document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
+
+    document.querySelectorAll("[data-detail]").forEach(button => {
+        button.addEventListener("click", () => {
+            const key = button.dataset.detail;
+            const details = {
+                properties: ["Properties Analyzed", fmt(totalProperties), "Total property records loaded by the Flask dashboard."],
+                median: ["Median Property Price", money(medianPrice), "The median price of listings. Unlike an average, it is less affected by extreme high prices."],
+                cities: ["Cities Covered", fmt(totalCities), "The number of unique cities represented in the dashboard data."],
+                r2: ["Best Model R²", Number(bestR2).toFixed(2) + "%", "R² measures how much variation in prices is explained by the model on its evaluation data. A higher score is generally better."]
+            };
+            if (details[key]) openModal(...details[key]);
+        });
+    });
+
+    function chartUnavailable(message) {
+        console.error(message);
+        document.querySelectorAll(".chart-wrap").forEach(el => {
+            if (typeof Chart === "undefined") {
+                el.innerHTML = '<p style="color:#B77AFF;padding:15px">Chart.js load झाले नाही. base.html मधील Chart.js script तपासा.</p>';
+            }
+        });
+    }
+
+    if (typeof Chart === "undefined") {
+        chartUnavailable("Chart.js is not loaded. Check base.html.");
+        return;
+    }
+
+    Chart.defaults.color = "#A29AAA";
+    Chart.defaults.font.family = "Arial, sans-serif";
+
+    const lime = "#B7FF38";
+    const purple = "#B77AFF";
+    const palette = [lime,purple,"#8D79FF","#F0B35A","#69D6C5","#FF8BA7","#60A5FA","#F472B6"];
+
+    let cityChart, typeChart;
+
+    const cities = cityLabels.map((name,i) => ({name:String(name), price:Number(cityPrices[i])}))
+        .filter(x => Number.isFinite(x.price));
+    const types = typeLabels.map((name,i) => ({name:String(name), count:Number(typeCounts[i])}))
+        .filter(x => Number.isFinite(x.count) && x.count >= 0);
+
+    const citySelect = document.getElementById("cityFilter");
+    const typeSelect = document.getElementById("typeFilter");
+
+    cities.forEach(x => citySelect.add(new Option(x.name,x.name)));
+    types.forEach(x => typeSelect.add(new Option(x.name,x.name)));
+
+    document.getElementById("cityEmpty").hidden = cities.length > 0;
+    document.getElementById("typeEmpty").hidden = types.length > 0;
+
+    function renderCity() {
+        const selected = citySelect.value;
+        const rows = selected === "__all__" ? cities : cities.filter(x => x.name === selected);
+        if (cityChart) cityChart.destroy();
+
+        cityChart = new Chart(document.getElementById("cityChart"), {
+            type:"bar",
+            data:{
+                labels:rows.map(x=>x.name),
+                datasets:[{
+                    label:"Median price",
+                    data:rows.map(x=>x.price),
+                    backgroundColor:rows.map(()=>purple),
+                    borderRadius:6
+                }]
+            },
+            options:{
+                indexAxis:"y", responsive:true, maintainAspectRatio:false,
+                onClick:(event,elements)=>{
+                    if (!elements.length) return;
+                    const item = rows[elements[0].index];
+                    openModal(item.name,money(item.price),"Median property listing price reported for "+item.name+".");
+                },
+                plugins:{
+                    legend:{display:false},
+                    tooltip:{callbacks:{label:c=>"Median price: "+money(c.raw)}}
+                },
+                scales:{
+                    x:{beginAtZero:true,grid:{color:"#30283A"},ticks:{callback:v=>compact(v)}},
+                    y:{grid:{display:false},ticks:{autoSkip:false}}
+                }
+            }
+        });
+    }
+
+    function renderTypes() {
+        const selected = typeSelect.value;
+        const rows = selected === "__all__" ? types : types.filter(x=>x.name===selected);
+        if (typeChart) typeChart.destroy();
+
+        const total = types.reduce((s,x)=>s+x.count,0);
+        typeChart = new Chart(document.getElementById("typeChart"), {
+            type:"doughnut",
+            data:{
+                labels:rows.map(x=>x.name),
+                datasets:[{
+                    data:rows.map(x=>x.count),
+                    backgroundColor:rows.map(x=>palette[Math.max(0,types.findIndex(t=>t.name===x.name))%palette.length]),
+                    borderColor:"#121116",borderWidth:3,hoverOffset:8
+                }]
+            },
+            options:{
+                responsive:true,maintainAspectRatio:false,cutout:"65%",
+                onClick:(event,elements)=>{
+                    if (!elements.length) return;
+                    const item = rows[elements[0].index];
+                    const percent = total ? (item.count/total*100).toFixed(1) : "0.0";
+                    openModal(item.name,fmt(item.count)+" properties",item.name+" represents "+percent+"% of property-type records.");
+                },
+                plugins:{
+                    legend:{position:"bottom",labels:{color:"#C8C0D0",padding:14,usePointStyle:true}},
+                    tooltip:{callbacks:{label:c=>{
+                        const percent=total?(c.raw/total*100).toFixed(1):"0.0";
+                        return c.label+": "+fmt(c.raw)+" ("+percent+"%)";
+                    }}}
+                }
+            }
+        });
+    }
+
+    citySelect.addEventListener("change",renderCity);
+    typeSelect.addEventListener("change",renderTypes);
+    document.getElementById("resetCity").addEventListener("click",()=>{citySelect.value="__all__";renderCity();});
+    document.getElementById("resetType").addEventListener("click",()=>{typeSelect.value="__all__";renderTypes();});
+
+    renderCity();
+    renderTypes();
+})();
+</script>
+{% endblock %}

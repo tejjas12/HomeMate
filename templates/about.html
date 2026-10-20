@@ -1,0 +1,2035 @@
+
+{% extends "base.html" %}
+
+{% block title %}Project Documentation | HomeMate{% endblock %}
+{% block page_heading %}Project Documentation{% endblock %}
+
+{% block content %}
+
+<style>
+/* ==========================================
+   HOMEMATE - COMPLETE PROJECT DOCUMENTATION
+   THEME: BLACK + PURPLE + NEON LIME
+   ========================================== */
+
+.hm-doc {
+    --purple: #B77AFF;
+    --purple-light: #D7B5FF;
+    --cyan: #B7FF38;
+    --muted: #B8B4C4;
+    --border: rgba(183, 122, 255, 0.23);
+    color: #F5F3F7;
+    animation: hmDocEnter .5s ease;
+}
+
+.hm-doc * {
+    box-sizing: border-box;
+}
+
+.hm-doc p {
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.85;
+}
+
+.hm-doc h1,
+.hm-doc h2,
+.hm-doc h3 {
+    color: #F5F3F7;
+}
+
+.hm-doc h2 {
+    font-size: 21px;
+    margin: 0 0 12px;
+}
+
+.hm-doc h3 {
+    font-size: 15px;
+    margin: 0 0 9px;
+}
+
+.hm-doc .doc-section {
+    margin-bottom: 23px;
+    scroll-margin-top: 90px;
+}
+
+.hm-doc .doc-card {
+    padding: 25px;
+    border: 1px solid var(--border);
+    border-radius: 19px;
+    background: linear-gradient(145deg, #15111B, #0D0D11);
+    box-shadow: 0 10px 25px rgba(0,0,0,.16);
+    min-width: 0;
+    transition: border-color .2s ease, transform .2s ease;
+}
+
+.hm-doc .doc-card:hover {
+    border-color: #B77AFF;
+}
+
+.hm-doc .doc-hero {
+    position: relative;
+    overflow: hidden;
+    padding: 35px;
+    margin-bottom: 23px;
+    border: 1px solid rgba(183,122,255,.38);
+    border-radius: 24px;
+    background:
+        radial-gradient(ellipse at 90% 10%, rgba(183,122,255,.15), transparent 42%),
+        linear-gradient(125deg, #24182F, #100E14 68%, #08090B);
+}
+
+.hm-doc .doc-hero::after {
+    content: "H";
+    position: absolute;
+    top: -55px;
+    right: 28px;
+    color: rgba(183,255,56,.055);
+    font-size: 250px;
+    line-height: 1;
+    font-weight: 900;
+    pointer-events: none;
+}
+
+.hm-doc .brand-row {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    margin-bottom: 25px;
+}
+
+.hm-doc .brand-icon {
+    width: 56px;
+    height: 56px;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #B7FF38, #B77AFF);
+    color: #08090B;
+    font-size: 31px;
+    font-weight: 900;
+    box-shadow: 0 8px 25px rgba(183,255,56,.12);
+}
+
+.hm-doc .brand-name {
+    font-size: 27px;
+    font-weight: 850;
+    letter-spacing: -1px;
+}
+
+.hm-doc .brand-name span {
+    color: var(--cyan);
+}
+
+.hm-doc .brand-subtitle {
+    color: #B8B4C4;
+    font-size: 9px;
+    letter-spacing: 2px;
+    margin-top: 5px;
+    font-weight: 750;
+}
+
+.hm-doc .doc-label {
+    display: inline-block;
+    position: relative;
+    z-index: 1;
+    padding: 8px 12px;
+    margin-bottom: 14px;
+    color: #B7FF38;
+    background: rgba(183,255,56,.07);
+    border: 1px solid rgba(183,255,56,.3);
+    border-radius: 30px;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .7px;
+}
+
+.hm-doc .doc-hero h1 {
+    position: relative;
+    z-index: 1;
+    margin: 0 0 13px;
+    font-size: clamp(27px, 4vw, 41px);
+    letter-spacing: -1.2px;
+    line-height: 1.2;
+}
+
+.hm-doc .doc-hero p {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: 0;
+    font-size: 14px;
+}
+
+.hm-doc .hero-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-top: 22px;
+    position: relative;
+    z-index: 1;
+}
+
+.hm-doc .hero-chip {
+    padding: 8px 11px;
+    border: 1px solid rgba(183,122,255,.27);
+    border-radius: 9px;
+    background: rgba(8,9,11,.65);
+    color: #E4D6F5;
+    font-size: 11px;
+    font-weight: 650;
+}
+
+.hm-doc .section-heading {
+    display: flex;
+    align-items: flex-start;
+    gap: 13px;
+    margin-bottom: 16px;
+}
+
+.hm-doc .section-icon {
+    width: 43px;
+    height: 43px;
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    border-radius: 13px;
+    background: #24182F;
+    border: 1px solid rgba(183,122,255,.28);
+    color: #B7FF38;
+    font-size: 21px;
+}
+
+.hm-doc .section-heading p {
+    margin: 0;
+}
+
+.hm-doc .doc-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: 17px;
+}
+
+.hm-doc .doc-grid.three {
+    grid-template-columns: repeat(3, minmax(0,1fr));
+}
+
+.hm-doc .doc-grid.four {
+    grid-template-columns: repeat(4, minmax(0,1fr));
+}
+
+.hm-doc .stat-card {
+    padding: 20px;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: linear-gradient(145deg, #17121E, #0D0D11);
+}
+
+.hm-doc .stat-label {
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 650;
+}
+
+.hm-doc .stat-value {
+    margin: 12px 0 7px;
+    font-size: clamp(21px, 2.4vw, 29px);
+    font-weight: 850;
+    letter-spacing: -.7px;
+    overflow-wrap: anywhere;
+}
+
+.hm-doc .stat-note {
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+.hm-doc .accent {
+    color: var(--purple-light);
+}
+
+.hm-doc .success {
+    color: var(--cyan);
+}
+
+.hm-doc .doc-list {
+    display: grid;
+    gap: 12px;
+    margin-top: 17px;
+}
+
+.hm-doc .doc-list-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px;
+    border: 1px solid rgba(183,122,255,.18);
+    border-radius: 12px;
+    background: #100E14;
+}
+
+.hm-doc .list-number {
+    display: grid;
+    place-items: center;
+    width: 29px;
+    height: 29px;
+    flex-shrink: 0;
+    border-radius: 9px;
+    background: #24182F;
+    border: 1px solid rgba(183,122,255,.25);
+    color: #B7FF38;
+    font-size: 12px;
+    font-weight: 850;
+}
+
+.hm-doc .doc-list-item strong {
+    display: block;
+    font-size: 13px;
+    margin: 2px 0 5px;
+}
+
+.hm-doc .doc-list-item p {
+    margin: 0;
+    font-size: 12px;
+}
+
+.hm-doc .info-note {
+    margin-top: 17px;
+    padding: 15px 17px;
+    border: 1px solid rgba(183,122,255,.3);
+    border-radius: 12px;
+    background: rgba(183,122,255,.07);
+    color: #D6D0DF;
+    font-size: 12px;
+    line-height: 1.8;
+}
+
+.hm-doc .info-note strong {
+    color: var(--purple-light);
+}
+
+.hm-doc .success-note {
+    border-color: rgba(183,255,56,.35);
+    background: rgba(183,255,56,.055);
+}
+
+.hm-doc .success-note strong {
+    color: var(--cyan);
+}
+
+.hm-doc .table-wrap {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 15px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+}
+
+.hm-doc table {
+    width: 100%;
+    min-width: 580px;
+    border-collapse: collapse;
+}
+
+.hm-doc th,
+.hm-doc td {
+    padding: 13px 14px;
+    text-align: left;
+    vertical-align: top;
+    border-bottom: 1px solid rgba(183,122,255,.14);
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+.hm-doc th {
+    color: #B7FF38;
+    background: #24182F;
+    font-weight: 750;
+}
+
+.hm-doc td {
+    color: #D0CBD7;
+    background: rgba(8,9,11,.35);
+}
+
+.hm-doc tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.hm-doc tbody tr:hover td {
+    background: rgba(183,122,255,.07);
+}
+
+.hm-doc .code-block {
+    overflow-x: auto;
+    padding: 17px;
+    margin-top: 13px;
+    border: 1px solid rgba(183,122,255,.24);
+    border-radius: 12px;
+    background: #08090B;
+    color: #D7B5FF;
+    font-family: "SFMono-Regular", Consolas, monospace;
+    font-size: 12px;
+    line-height: 1.85;
+    white-space: pre;
+}
+
+.hm-doc .code-block code {
+    font-family: inherit;
+}
+
+.hm-doc .model-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.hm-doc .model-card.final-model {
+    border-color: rgba(183,255,56,.38);
+    background: linear-gradient(145deg, #1C2015, #100E14 70%);
+}
+
+.hm-doc .model-tag {
+    display: inline-block;
+    margin-bottom: 12px;
+    padding: 6px 9px;
+    border-radius: 20px;
+    background: rgba(183,122,255,.12);
+    border: 1px solid rgba(183,122,255,.25);
+    color: #D7B5FF;
+    font-size: 10px;
+    font-weight: 750;
+}
+
+.hm-doc .final-model .model-tag {
+    background: rgba(183,255,56,.09);
+    border-color: rgba(183,255,56,.28);
+    color: #B7FF38;
+}
+
+.hm-doc .model-score {
+    margin: 13px 0 7px;
+    font-size: 34px;
+    font-weight: 850;
+    letter-spacing: -1px;
+}
+
+.hm-doc .metric-name {
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.hm-doc .metric-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 12px 0;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+}
+
+.hm-doc .metric-line span {
+    color: var(--muted);
+}
+
+.hm-doc .metric-line strong {
+    color: #F5F3F7;
+}
+
+.hm-doc .timeline {
+    position: relative;
+    display: grid;
+    gap: 0;
+    margin-top: 20px;
+}
+
+.hm-doc .timeline-item {
+    position: relative;
+    display: grid;
+    grid-template-columns: 42px minmax(0,1fr);
+    gap: 15px;
+    padding-bottom: 24px;
+}
+
+.hm-doc .timeline-item:last-child {
+    padding-bottom: 0;
+}
+
+.hm-doc .timeline-marker {
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+.hm-doc .timeline-marker::after {
+    content: "";
+    position: absolute;
+    top: 38px;
+    bottom: -4px;
+    width: 2px;
+    background: linear-gradient(#B77AFF, #24182F);
+}
+
+.hm-doc .timeline-item:last-child .timeline-marker::after {
+    display: none;
+}
+
+.hm-doc .timeline-dot {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    background: #24182F;
+    border: 1px solid rgba(183,122,255,.32);
+    color: #B7FF38;
+    font-weight: 850;
+    font-size: 12px;
+}
+
+.hm-doc .timeline-content {
+    padding: 18px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: #100E14;
+}
+
+.hm-doc .timeline-content h3 {
+    font-size: 14px;
+}
+
+.hm-doc .timeline-content p {
+    margin: 0;
+    font-size: 12px;
+}
+
+.hm-doc .mini-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-top: 12px;
+}
+
+.hm-doc .mini-tag {
+    padding: 5px 8px;
+    border-radius: 7px;
+    background: rgba(183,122,255,.1);
+    border: 1px solid rgba(183,122,255,.17);
+    color: #D7B5FF;
+    font-size: 10px;
+}
+
+.hm-doc .toc {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-top: 18px;
+}
+
+.hm-doc .toc a {
+    text-decoration: none;
+    padding: 9px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(183,122,255,.22);
+    background: #100E14;
+    color: #D7B5FF;
+    font-size: 11px;
+    font-weight: 650;
+    transition: .2s;
+}
+
+.hm-doc .toc a:hover {
+    color: #08090B;
+    border-color: #B7FF38;
+    background: #B7FF38;
+}
+
+.hm-doc .doc-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 11px 15px;
+    border-radius: 10px;
+    border: 1px solid #B77AFF;
+    background: #24182F;
+    color: #F5F3F7;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 750;
+    cursor: pointer;
+    transition: transform .2s ease, opacity .2s ease;
+}
+
+.hm-doc .doc-button:hover {
+    transform: translateY(-2px);
+    opacity: .92;
+    border-color: #B7FF38;
+}
+
+.hm-doc .doc-actions .doc-button:first-child {
+    color: #08090B;
+    background: #B7FF38;
+    border-color: #B7FF38;
+}
+
+.hm-doc .project-footer {
+    padding: 27px;
+    margin-top: 24px;
+    border: 1px solid rgba(183,122,255,.3);
+    border-radius: 18px;
+    text-align: center;
+    background:
+        radial-gradient(ellipse at top, rgba(183,122,255,.1), transparent 65%),
+        linear-gradient(110deg, #24182F, #100E14);
+}
+
+.hm-doc .project-footer h2 {
+    margin-bottom: 9px;
+}
+
+.hm-doc .project-footer p {
+    margin: 0;
+}
+
+.hm-doc .project-footer strong {
+    color: var(--cyan);
+}
+
+.hm-doc .muted-small {
+    font-size: 11px;
+    color: #9D97A9;
+}
+
+@keyframes hmDocEnter {
+    from { opacity: 0; transform: translateY(9px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media(max-width:1000px) {
+    .hm-doc .doc-grid.four {
+        grid-template-columns: repeat(2,minmax(0,1fr));
+    }
+
+    .hm-doc .doc-grid.three {
+        grid-template-columns: repeat(2,minmax(0,1fr));
+    }
+}
+
+@media(max-width:700px) {
+    .hm-doc .doc-hero {
+        padding: 24px;
+    }
+
+    .hm-doc .doc-hero::after {
+        right: -10px;
+        font-size: 170px;
+    }
+
+    .hm-doc .doc-grid,
+    .hm-doc .doc-grid.three,
+    .hm-doc .doc-grid.four {
+        grid-template-columns: 1fr;
+    }
+
+    .hm-doc .doc-card {
+        padding: 19px;
+    }
+
+    .hm-doc .brand-name {
+        font-size: 23px;
+    }
+
+    .hm-doc .brand-icon {
+        width: 49px;
+        height: 49px;
+    }
+
+    .hm-doc .model-score {
+        font-size: 30px;
+    }
+}
+
+@media(prefers-reduced-motion:reduce) {
+    .hm-doc {
+        animation: none;
+    }
+
+    .hm-doc .doc-card,
+    .hm-doc .toc a,
+    .hm-doc .doc-button {
+        transition: none;
+    }
+}
+
+@media print {
+    .hm-doc {
+        color: #111;
+        animation: none;
+    }
+
+    .hm-doc .doc-hero,
+    .hm-doc .doc-card,
+    .hm-doc .stat-card,
+    .hm-doc .timeline-content,
+    .hm-doc .project-footer {
+        color: #111;
+        background: white;
+        border: 1px solid #ccc;
+        box-shadow: none;
+        break-inside: avoid;
+    }
+
+    .hm-doc h1,
+    .hm-doc h2,
+    .hm-doc h3,
+    .hm-doc .stat-value,
+    .hm-doc .brand-name {
+        color: #111;
+    }
+
+    .hm-doc p,
+    .hm-doc .stat-label,
+    .hm-doc .stat-note,
+    .hm-doc .timeline-content p,
+    .hm-doc .metric-line span {
+        color: #444;
+    }
+
+    .hm-doc .doc-actions,
+    .hm-doc .toc {
+        display: none;
+    }
+}
+</style>
+
+<div class="hm-doc">
+
+    <!-- HERO -->
+    <section class="doc-hero">
+        <div class="brand-row">
+            <div class="brand-icon">H</div>
+            <div>
+                <div class="brand-name">Home<span>Mate</span></div>
+                <div class="brand-subtitle">REAL ESTATE ANALYTICS</div>
+            </div>
+        </div>
+
+        <span class="doc-label">COMPLETE PROJECT DOCUMENTATION</span>
+
+        <h1>From Raw Data to House Price Prediction</h1>
+
+        <p>
+            A step-by-step documentation of the HomeMate machine learning
+            project, covering dataset acquisition, data understanding,
+            cleaning, preprocessing, exploratory analysis, model training,
+            evaluation, model selection and Flask web application development.
+        </p>
+
+        <div class="hero-chips">
+            <span class="hero-chip">Python</span>
+            <span class="hero-chip">Google Colab</span>
+            <span class="hero-chip">Pandas</span>
+            <span class="hero-chip">Scikit-learn</span>
+            <span class="hero-chip">Flask</span>
+            <span class="hero-chip">Chart.js</span>
+        </div>
+
+        <div class="doc-actions">
+            <button type="button" class="doc-button" id="printDocumentation">
+                ⤓ Print / Save as PDF
+            </button>
+            <a href="{{ url_for('dashboard') }}" class="doc-button">
+                ← Back to Dashboard
+            </a>
+        </div>
+    </section>
+
+    <!-- CONTENT NAVIGATION -->
+    <section class="doc-section doc-card">
+        <h2>Documentation Contents</h2>
+        <p>
+            Use the links below to navigate through each phase of the project.
+        </p>
+
+        <nav class="toc">
+            <a href="#overview">01. Overview</a>
+            <a href="#dataset">02. Dataset</a>
+            <a href="#cleaning">03. Cleaning</a>
+            <a href="#eda">04. EDA</a>
+            <a href="#preprocessing">05. Preprocessing</a>
+            <a href="#training">06. Model Training</a>
+            <a href="#evaluation">07. Evaluation</a>
+            <a href="#selection">08. Final Model</a>
+            <a href="#deployment">09. Web Application</a>
+            <a href="#limitations">10. Limitations</a>
+            <a href="#workflow">11. Complete Workflow</a>
+        </nav>
+    </section>
+
+    <!-- 01 OVERVIEW -->
+    <section class="doc-section" id="overview">
+        <div class="section-heading">
+            <div class="section-icon">01</div>
+            <div>
+                <h2>Project Overview</h2>
+                <p>Understanding the problem, objectives and expected output.</p>
+            </div>
+        </div>
+
+        <div class="doc-grid">
+            <article class="doc-card">
+                <h3>Problem Statement</h3>
+                <p>
+                    Property prices vary according to location, property
+                    size, number of bedrooms, property category, furnishing
+                    and availability status. Manually estimating a reasonable
+                    price from several features can be difficult.
+                </p>
+                <p>
+                    HomeMate uses historical property listings to learn
+                    relationships between property features and listed prices,
+                    then uses a trained regression model to estimate a price
+                    for a property described by the user.
+                </p>
+            </article>
+
+            <article class="doc-card">
+                <h3>Project Objectives</h3>
+                <div class="doc-list">
+                    <div class="doc-list-item">
+                        <span class="list-number">1</span>
+                        <div>
+                            <strong>Understand property data</strong>
+                            <p>Inspect the dataset, its columns and value distributions.</p>
+                        </div>
+                    </div>
+                    <div class="doc-list-item">
+                        <span class="list-number">2</span>
+                        <div>
+                            <strong>Prepare reliable inputs</strong>
+                            <p>Clean and transform data for machine learning.</p>
+                        </div>
+                    </div>
+                    <div class="doc-list-item">
+                        <span class="list-number">3</span>
+                        <div>
+                            <strong>Train and compare models</strong>
+                            <p>Evaluate Linear Regression and Decision Tree Regression.</p>
+                        </div>
+                    </div>
+                    <div class="doc-list-item">
+                        <span class="list-number">4</span>
+                        <div>
+                            <strong>Build an interactive application</strong>
+                            <p>Connect the trained model to a Flask website.</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- PROJECT SNAPSHOT -->
+    <section class="doc-section">
+        <div class="section-heading">
+            <div class="section-icon">▦</div>
+            <div>
+                <h2>Project at a Glance</h2>
+                <p>Key details from the HomeMate development workflow.</p>
+            </div>
+        </div>
+
+        <div class="doc-grid four">
+            <div class="stat-card">
+                <div class="stat-label">Raw Dataset Records</div>
+                <div class="stat-value">332,096</div>
+                <div class="stat-note">Records in the original loaded dataset.</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-label">Cleaned Records</div>
+                <div class="stat-value accent">166,861</div>
+                <div class="stat-note">Records in the prepared residential dataset.</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-label">Input Features</div>
+                <div class="stat-value">7</div>
+                <div class="stat-note">Property attributes used for prediction.</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-label">Models Compared</div>
+                <div class="stat-value">2</div>
+                <div class="stat-note">Linear Regression and Decision Tree.</div>
+            </div>
+        </div>
+
+        <div class="info-note">
+            <strong>Important:</strong> The raw and cleaned record counts describe
+            different stages of the data workflow. The cleaned dataset contains
+            fewer records after data preparation. The exact row count can vary
+            if the cleaning procedure or input CSV changes.
+        </div>
+    </section>
+
+    <!-- 02 DATASET -->
+    <section class="doc-section" id="dataset">
+        <div class="section-heading">
+            <div class="section-icon">02</div>
+            <div>
+                <h2>Dataset Acquisition and Understanding</h2>
+                <p>The first phase performed in Google Colab.</p>
+            </div>
+        </div>
+
+        <div class="doc-card">
+            <h3>Original CSV File</h3>
+            <p>
+                The project started with <strong>Makaan_Properties_Buy.csv</strong>,
+                a dataset containing residential property listing information.
+                The CSV was loaded into a Pandas DataFrame in Google Colab so
+                that its structure and contents could be inspected using Python.
+            </p>
+
+            <div class="code-block"><code>import pandas as pd
+import numpy as np
+
+df = pd.read_csv("Makaan_Properties_Buy.csv")
+
+print(df.shape)
+print(df.head())
+print(df.columns)
+print(df.info())</code></div>
+
+            <div class="info-note">
+                <strong>Why these commands?</strong><br>
+                <code>read_csv()</code> loads the file into a DataFrame.
+                <code>shape</code> reports rows and columns.
+                <code>head()</code> displays sample records.
+                <code>columns</code> lists field names, and
+                <code>info()</code> helps inspect data types and missing values.
+                This is an illustrative example of the inspection stage; the
+                exact variable names in the notebook may differ.
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Meaning</th>
+                            <th>Role in HomeMate</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Price</td>
+                            <td>Listed property price.</td>
+                            <td>Prediction target (y).</td>
+                        </tr>
+                        <tr>
+                            <td>Size</td>
+                            <td>Property area, generally in square feet.</td>
+                            <td>Input feature (X).</td>
+                        </tr>
+                        <tr>
+                            <td>No_of_BHK</td>
+                            <td>Number of bedrooms, hall and kitchen configuration.</td>
+                            <td>Input feature (X).</td>
+                        </tr>
+                        <tr>
+                            <td>City_name</td>
+                            <td>City in which the property is listed.</td>
+                            <td>Categorical input.</td>
+                        </tr>
+                        <tr>
+                            <td>Property_type</td>
+                            <td>Property category.</td>
+                            <td>Categorical input.</td>
+                        </tr>
+                        <tr>
+                            <td>Property_status</td>
+                            <td>Listing or property status.</td>
+                            <td>Categorical input.</td>
+                        </tr>
+                        <tr>
+                            <td>is_furnished</td>
+                            <td>Furnishing information.</td>
+                            <td>Input feature.</td>
+                        </tr>
+                        <tr>
+                            <td>is_ready_to_move</td>
+                            <td>Readiness for occupation.</td>
+                            <td>Input feature.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="info-note">
+                <strong>Target and features:</strong> The target is
+                <code>Price</code>. The remaining seven listed attributes are
+                used as the input feature set. The model learns from the
+                relationship between these inputs and the target price.
+            </div>
+        </div>
+    </section>
+
+    <!-- 03 CLEANING -->
+    <section class="doc-section" id="cleaning">
+        <div class="section-heading">
+            <div class="section-icon">03</div>
+            <div>
+                <h2>Data Cleaning</h2>
+                <p>Preparing the raw listings before model training.</p>
+            </div>
+        </div>
+
+        <div class="doc-card">
+            <p>
+                Raw property data can contain missing values, inconsistent
+                formats, irrelevant records or values that cannot be used
+                reliably for prediction. Data cleaning helps reduce these
+                problems before the machine learning algorithms are trained.
+            </p>
+
+            <div class="doc-list">
+                <div class="doc-list-item">
+                    <span class="list-number">1</span>
+                    <div>
+                        <strong>Inspect missing values</strong>
+                        <p>
+                            Identify which columns contain missing values and
+                            determine whether those values need to be removed
+                            or imputed. This avoids silently treating missing
+                            information as valid data.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="doc-list-item">
+                    <span class="list-number">2</span>
+                    <div>
+                        <strong>Check data types</strong>
+                        <p>
+                            Confirm that numerical fields such as price, size
+                            and BHK can be interpreted numerically, while
+                            fields such as city and property type remain
+                            categorical.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="doc-list-item">
+                    <span class="list-number">3</span>
+                    <div>
+                        <strong>Validate price and size values</strong>
+                        <p>
+                            Check for invalid or unusable numerical values.
+                            A non-positive price, for example, is generally
+                            not meaningful as a property listing target.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="doc-list-item">
+                    <span class="list-number">4</span>
+                    <div>
+                        <strong>Focus on residential records</strong>
+                        <p>
+                            Prepare the residential listing dataset used by
+                            HomeMate so that the model is aligned with the
+                            intended house price prediction task.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="doc-list-item">
+                    <span class="list-number">5</span>
+                    <div>
+                        <strong>Review duplicates and consistency</strong>
+                        <p>
+                            Duplicate and inconsistent records should be
+                            inspected because repeated or conflicting records
+                            can distort the distribution of prices.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-note">
+                <strong>Why cleaning matters:</strong> Poor-quality data can
+                teach a model incorrect relationships. Cleaning improves
+                consistency, makes analysis more meaningful and helps prevent
+                invalid inputs from affecting model evaluation.
+            </div>
+
+            <p class="muted-small">
+                Documentation note: These are the data-quality checks relevant
+                to the workflow. Only checks actually present in the executed
+                Colab notebook should be described in a formal report as
+                completed operations; not every example above necessarily
+                represents a separate executed command.
+            </p>
+        </div>
+    </section>
+
+    <!-- 04 EDA -->
+    <section class="doc-section" id="eda">
+        <div class="section-heading">
+            <div class="section-icon">04</div>
+            <div>
+                <h2>Exploratory Data Analysis (EDA)</h2>
+                <p>Understanding patterns before building the model.</p>
+            </div>
+        </div>
+
+        <div class="doc-grid">
+            <article class="doc-card">
+                <h3>What is EDA?</h3>
+                <p>
+                    Exploratory Data Analysis is the process of examining
+                    a dataset using summary statistics, tables and charts
+                    before fitting a machine learning model.
+                </p>
+                <p>
+                    It helps identify distributions, unusual values,
+                    relationships between features and possible data-quality
+                    issues that require further investigation.
+                </p>
+            </article>
+
+            <article class="doc-card">
+                <h3>Analysis Relevant to HomeMate</h3>
+                <div class="doc-list">
+                    <div class="doc-list-item">
+                        <span class="list-number">A</span>
+                        <div>
+                            <strong>Price distribution</strong>
+                            <p>Understand how listed property prices vary.</p>
+                        </div>
+                    </div>
+                    <div class="doc-list-item">
+                        <span class="list-number">B</span>
+                        <div>
+                            <strong>Size and BHK</strong>
+                            <p>Inspect property area and bedroom-count patterns.</p>
+                        </div>
+                    </div>
+                    <div class="doc-list-item">
+                        <span class="list-number">C</span>
+                        <div>
+                            <strong>City comparisons</strong>
+                            <p>Explore differences in listing prices across cities.</p>
+                        </div>
+                    </div>
+                    <div class="doc-list-item">
+                        <span class="list-number">D</span>
+                        <div>
+                            <strong>Category distribution</strong>
+                            <p>Inspect property types and categorical fields.</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+
+        <div class="doc-card" style="margin-top:17px;">
+            <h3>Why EDA was important</h3>
+            <p>
+                Property price data can have a wide numerical range. EDA
+                helps identify whether a small number of expensive listings
+                dominate the distribution, whether some categories are
+                uncommon, and whether the selected features are useful for
+                describing property listings.
+            </p>
+            <p>
+                The dashboard later presents city-wise prices and property
+                type distributions as interactive charts, making these
+                patterns easier to explore.
+            </p>
+        </div>
+    </section>
+
+    <!-- 05 PREPROCESSING -->
+    <section class="doc-section" id="preprocessing">
+        <div class="section-heading">
+            <div class="section-icon">05</div>
+            <div>
+                <h2>Feature Selection and Preprocessing</h2>
+                <p>Converting the cleaned data into model-ready inputs.</p>
+            </div>
+        </div>
+
+        <div class="doc-card">
+            <h3>Separating X and y</h3>
+            <p>
+                The model requires a set of input features and a target value.
+                We define X as the seven property attributes and y as the
+                property price to be predicted.
+            </p>
+
+            <div class="code-block"><code>feature_columns = [
+    "Size",
+    "No_of_BHK",
+    "Property_type",
+    "Property_status",
+    "City_name",
+    "is_furnished",
+    "is_ready_to_move"
+]
+
+X = df[feature_columns]
+y = df["Price"]</code></div>
+
+            <div class="info-note">
+                <strong>Why separate them?</strong><br>
+                This clearly identifies what the model is allowed to use as
+                input and which value it must learn to predict.
+            </div>
+        </div>
+
+        <div class="doc-card" style="margin-top:17px;">
+            <h3>Numerical and categorical preprocessing</h3>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Operation</th>
+                            <th>Purpose</th>
+                            <th>HomeMate relevance</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Numerical imputation</td>
+                            <td>Handle missing numerical values.</td>
+                            <td>Helps the model receive usable numerical inputs.</td>
+                        </tr>
+                        <tr>
+                            <td>Categorical imputation</td>
+                            <td>Handle missing categories where needed.</td>
+                            <td>Maintains usable city and property category values.</td>
+                        </tr>
+                        <tr>
+                            <td>One-hot encoding</td>
+                            <td>Represent categories using numerical indicator columns.</td>
+                            <td>Allows models to use city and property type information.</td>
+                        </tr>
+                        <tr>
+                            <td>Pipeline</td>
+                            <td>Keep preprocessing and model operations together.</td>
+                            <td>Ensures prediction inputs receive the same transformations.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="code-block"><code># Illustrative preprocessing structure
+
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
+from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import OneHotEncoder
+
+numeric_features = ["Size", "No_of_BHK"]
+
+categorical_features = [
+    "Property_type",
+    "Property_status",
+    "City_name",
+    "is_furnished",
+    "is_ready_to_move"
+]
+
+numeric_transformer = Pipeline(steps=[
+    ("imputer", SimpleImputer(strategy="median"))
+])
+
+categorical_transformer = Pipeline(steps=[
+    ("imputer", SimpleImputer(strategy="most_frequent")),
+    ("encoder", OneHotEncoder(handle_unknown="ignore"))
+])
+
+preprocessor = ColumnTransformer(transformers=[
+    ("num", numeric_transformer, numeric_features),
+    ("cat", categorical_transformer, categorical_features)
+])</code></div>
+
+            <p class="muted-small">
+                The code above illustrates a common preprocessing design.
+                Use the exact executed notebook code when reproducing the
+                implementation in a technical report.
+            </p>
+        </div>
+    </section>
+
+    <!-- 06 TRAINING -->
+    <section class="doc-section" id="training">
+        <div class="section-heading">
+            <div class="section-icon">06</div>
+            <div>
+                <h2>Train-Test Split and Model Building</h2>
+                <p>Training on one subset and evaluating on unseen records.</p>
+            </div>
+        </div>
+
+        <div class="doc-card">
+            <h3>Train-Test Split: 80/20</h3>
+            <p>
+                The prepared data was split into a training set and a test
+                set using an 80/20 split with <code>random_state=42</code>.
+                The training set is used to fit the model; the test set is
+                reserved for evaluating how well it predicts records that
+                were not used during training.
+            </p>
+
+            <div class="doc-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Training Set</div>
+                    <div class="stat-value accent">80%</div>
+                    <div class="stat-note">Used to learn patterns from the data.</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Test Set</div>
+                    <div class="stat-value success">20%</div>
+                    <div class="stat-note">Used for model evaluation.</div>
+                </div>
+            </div>
+
+            <div class="code-block"><code>from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.20,
+    random_state=42
+)</code></div>
+
+            <div class="info-note">
+                <strong>Why random_state=42?</strong><br>
+                It makes the random split reproducible when the dataset and
+                row order remain the same. Reproducibility makes it easier
+                to compare models under the same evaluation conditions.
+            </div>
+        </div>
+
+        <div class="doc-grid" style="margin-top:17px;">
+            <article class="doc-card model-card">
+                <span class="model-tag">MODEL 01 · BASELINE</span>
+                <h2>Linear Regression</h2>
+                <p>
+                    Linear Regression estimates a continuous target by
+                    learning a linear relationship between the input
+                    features and the target price.
+                </p>
+                <div class="doc-list">
+                    <div class="doc-list-item">
+                        <span class="list-number">+</span>
+                        <div>
+                            <strong>Advantages</strong>
+                            <p>Simple, fast and comparatively easy to interpret.</p>
+                        </div>
+                    </div>
+                    <div class="doc-list-item">
+                        <span class="list-number">!</span>
+                        <div>
+                            <strong>Consideration</strong>
+                            <p>Complex non-linear relationships may not be represented well by a linear model.</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <article class="doc-card model-card final-model">
+                <span class="model-tag">MODEL 02 · SELECTED</span>
+                <h2>Decision Tree Regressor</h2>
+                <p>
+                    A Decision Tree Regressor learns decision rules from
+                    the feature values and predicts a numerical output
+                    from the resulting tree structure.
+                </p>
+                <div class="doc-list">
+                    <div class="doc-list-item">
+                        <span class="list-number">+</span>
+                        <div>
+                            <strong>Advantages</strong>
+                            <p>Can represent non-linear relationships and feature interactions.</p>
+                        </div>
+                    </div>
+                    <div class="doc-list-item">
+                        <span class="list-number">!</span>
+                        <div>
+                            <strong>Consideration</strong>
+                            <p>Tree depth and leaf-size settings affect generalization.</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+
+        <div class="doc-card" style="margin-top:17px;">
+            <h3>Decision Tree Configuration</h3>
+            <p>
+                The recorded model configuration used a maximum depth of
+                20, a minimum of 5 samples per leaf, and random state 42.
+                These settings control tree complexity and make the
+                training procedure reproducible.
+            </p>
+
+            <div class="code-block"><code>from sklearn.tree import DecisionTreeRegressor
+from sklearn.linear_model import LinearRegression
+from sklearn.pipeline import Pipeline
+
+# Example model definitions from the project workflow
+
+linear_model = Pipeline(steps=[
+    ("preprocessor", preprocessor),
+    ("model", LinearRegression())
+])
+
+decision_tree_model = Pipeline(steps=[
+    ("preprocessor", preprocessor),
+    ("model", DecisionTreeRegressor(
+        max_depth=20,
+        min_samples_leaf=5,
+        random_state=42
+    ))
+])
+
+linear_model.fit(X_train, y_train)
+decision_tree_model.fit(X_train, y_train)</code></div>
+
+            <p class="muted-small">
+                This is an explanatory representation of the training
+                approach. The saved model pipelines remain the source of
+                truth for the application's actual predictions.
+            </p>
+        </div>
+
+        <div class="info-note">
+            <strong>Why not Logistic Regression?</strong><br>
+            Logistic Regression is designed mainly for classification tasks,
+            where the output is a class or class probability. HomeMate predicts
+            a continuous property price, so Linear Regression and Decision
+            Tree Regressor are more appropriate algorithms for the comparison.
+        </div>
+    </section>
+
+    <!-- 07 EVALUATION -->
+    <section class="doc-section" id="evaluation">
+        <div class="section-heading">
+            <div class="section-icon">07</div>
+            <div>
+                <h2>Model Evaluation and Comparison</h2>
+                <p>Measuring how closely predictions match actual prices.</p>
+            </div>
+        </div>
+
+        <div class="doc-card">
+            <h3>Evaluation Metrics</h3>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Meaning</th>
+                            <th>How to interpret it</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>MAE</td>
+                            <td>Mean Absolute Error</td>
+                            <td>Average absolute difference between actual and predicted prices. Lower is better.</td>
+                        </tr>
+                        <tr>
+                            <td>RMSE</td>
+                            <td>Root Mean Squared Error</td>
+                            <td>Penalizes large prediction errors more strongly. Lower is better.</td>
+                        </tr>
+                        <tr>
+                            <td>R²</td>
+                            <td>Coefficient of Determination</td>
+                            <td>Indicates how much target variation is explained by the model. Higher is generally better.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="doc-grid" style="margin-top:18px;">
+                <article class="stat-card">
+                    <div class="stat-label">Linear Regression · R²</div>
+                    <div class="stat-value accent">48.03%</div>
+                    <div class="stat-note">Recorded evaluation result.</div>
+                </article>
+
+                <article class="stat-card">
+                    <div class="stat-label">Decision Tree · R²</div>
+                    <div class="stat-value success">71.67%</div>
+                    <div class="stat-note">Recorded evaluation result.</div>
+                </article>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Evaluation Metric</th>
+                            <th>Linear Regression</th>
+                            <th>Decision Tree</th>
+                            <th>Preferred Direction</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>MAE</td>
+                            <td>₹1,85,40,917</td>
+                            <td>₹89,38,273</td>
+                            <td class="success">Lower</td>
+                        </tr>
+                        <tr>
+                            <td>RMSE</td>
+                            <td>₹4,41,06,057</td>
+                            <td>₹3,25,62,627</td>
+                            <td class="success">Lower</td>
+                        </tr>
+                        <tr>
+                            <td>R² Score</td>
+                            <td>48.03%</td>
+                            <td>71.67%</td>
+                            <td class="success">Higher</td>
+                        </tr>
+                        <tr>
+                            <td>Recorded Training Time</td>
+                            <td>1.29 seconds</td>
+                            <td>1.75 seconds</td>
+                            <td>Depends on requirements</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="info-note success-note">
+                <strong>What do the results tell us?</strong><br>
+                In the recorded comparison, the Decision Tree achieved a
+                higher R² score and lower MAE and RMSE than Linear Regression.
+                Its recorded training time was slightly longer. The results
+                therefore favour the Decision Tree for this project, although
+                performance should always be validated on the same held-out
+                test data.
+            </div>
+        </div>
+    </section>
+
+    <!-- 08 MODEL SELECTION -->
+    <section class="doc-section" id="selection">
+        <div class="section-heading">
+            <div class="section-icon">08</div>
+            <div>
+                <h2>Why Decision Tree Was Selected</h2>
+                <p>The final model choice based on the recorded evaluation.</p>
+            </div>
+        </div>
+
+        <div class="doc-card">
+            <div class="doc-grid">
+                <div class="stat-card">
+                    <div class="stat-label">R² Improvement</div>
+                    <div class="stat-value success">23.64 pp</div>
+                    <div class="stat-note">
+                        Difference between 71.67% and 48.03%; expressed in
+                        percentage points.
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-label">MAE Reduction</div>
+                    <div class="stat-value success">51.79%</div>
+                    <div class="stat-note">
+                        Approximate reduction relative to Linear Regression's
+                        recorded MAE.
+                    </div>
+                </div>
+            </div>
+
+            <div class="doc-list">
+                <div class="doc-list-item">
+                    <span class="list-number">1</span>
+                    <div>
+                        <strong>Better R² score</strong>
+                        <p>
+                            The recorded Decision Tree score was 71.67%,
+                            compared with 48.03% for Linear Regression.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="doc-list-item">
+                    <span class="list-number">2</span>
+                    <div>
+                        <strong>Lower average absolute error</strong>
+                        <p>
+                            The Decision Tree's recorded MAE was approximately
+                            ₹89.38 lakh, compared with approximately ₹1.85 crore
+                            for Linear Regression.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="doc-list-item">
+                    <span class="list-number">3</span>
+                    <div>
+                        <strong>Lower RMSE</strong>
+                        <p>
+                            The recorded RMSE was lower for the Decision Tree,
+                            indicating a smaller squared-error-based penalty
+                            on that evaluation set.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="doc-list-item">
+                    <span class="list-number">4</span>
+                    <div>
+                        <strong>Suitable modelling approach</strong>
+                        <p>
+                            A tree-based model can capture non-linear
+                            relationships between property characteristics
+                            and prices.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-note">
+                <strong>Final decision:</strong> The Decision Tree Regressor
+                was selected because it performed better on the recorded
+                evaluation metrics. This does not mean that it is universally
+                superior; its performance depends on the dataset, the
+                preprocessing and the evaluation procedure.
+            </div>
+        </div>
+    </section>
+
+    <!-- SAVING MODELS -->
+    <section class="doc-section">
+        <div class="section-heading">
+            <div class="section-icon">▣</div>
+            <div>
+                <h2>Saving the Trained Models</h2>
+                <p>Preparing the trained pipelines for use outside Colab.</p>
+            </div>
+        </div>
+
+        <div class="doc-card">
+            <p>
+                After training and comparison, the trained pipelines and
+                model comparison report were saved as files. This allows the
+                Flask application to load an existing model instead of
+                retraining it every time a user visits the website.
+            </p>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>File</th>
+                            <th>Purpose</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>linear_regression_pipeline.pkl</code></td>
+                            <td>Saved Linear Regression pipeline.</td>
+                        </tr>
+                        <tr>
+                            <td><code>decision_tree_pipeline.pkl</code></td>
+                            <td>Saved Decision Tree pipeline used for prediction.</td>
+                        </tr>
+                        <tr>
+                            <td><code>model_comparison.csv</code></td>
+                            <td>Recorded evaluation metrics for the model comparison page.</td>
+                        </tr>
+                        <tr>
+                            <td><code>HomeMate_residential.csv</code></td>
+                            <td>Cleaned residential dataset used in the project workflow.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="code-block"><code>import joblib
+
+joblib.dump(
+    linear_model,
+    "linear_regression_pipeline.pkl"
+)
+
+joblib.dump(
+    decision_tree_model,
+    "decision_tree_pipeline.pkl"
+)
+
+results_df.to_csv(
+    "model_comparison.csv",
+    index=False
+)</code></div>
+
+            <p class="muted-small">
+                These are representative save operations. The actual filenames
+                and output directory should match the files created in the
+                executed Colab notebook.
+            </p>
+        </div>
+    </section>
+
+    <!-- 09 DEPLOYMENT -->
+    <section class="doc-section" id="deployment">
+        <div class="section-heading">
+            <div class="section-icon">09</div>
+            <div>
+                <h2>Flask Web Application Development</h2>
+                <p>Connecting the trained model to the HomeMate interface.</p>
+            </div>
+        </div>
+
+        <div class="doc-card">
+            <p>
+                Model development took place in Google Colab. The website
+                was then developed locally in VS Code using Flask, HTML,
+                CSS and JavaScript. The saved model pipeline is loaded by
+                the backend, and the frontend provides pages for exploring
+                data, submitting property features and viewing analytics.
+            </p>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-marker">
+                        <div class="timeline-dot">01</div>
+                    </div>
+                    <div class="timeline-content">
+                        <h3>Dashboard</h3>
+                        <p>
+                            Displays property dataset statistics, city-wise
+                            price comparisons, property type distributions
+                            and a model score summary.
+                        </p>
+                        <div class="mini-tags">
+                            <span class="mini-tag">Dashboard</span>
+                            <span class="mini-tag">Chart.js</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-marker">
+                        <div class="timeline-dot">02</div>
+                    </div>
+                    <div class="timeline-content">
+                        <h3>Explore Data</h3>
+                        <p>
+                            Provides property search and filters, summary
+                            statistics, charts, a paginated records table
+                            and CSV export functionality.
+                        </p>
+                        <div class="mini-tags">
+                            <span class="mini-tag">Filtering</span>
+                            <span class="mini-tag">CSV Export</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-marker">
+                        <div class="timeline-dot">03</div>
+                    </div>
+                    <div class="timeline-content">
+                        <h3>Price Prediction</h3>
+                        <p>
+                            Collects property inputs, passes them to the
+                            backend, applies the saved model pipeline and
+                            displays the predicted price.
+                        </p>
+                        <div class="mini-tags">
+                            <span class="mini-tag">Flask</span>
+                            <span class="mini-tag">Decision Tree</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-marker">
+                        <div class="timeline-dot">04</div>
+                    </div>
+                    <div class="timeline-content">
+                        <h3>Model Comparison</h3>
+                        <p>
+                            Presents MAE, RMSE, R² and training time for
+                            the two evaluated models, with interactive
+                            comparison charts.
+                        </p>
+                        <div class="mini-tags">
+                            <span class="mini-tag">MAE</span>
+                            <span class="mini-tag">RMSE</span>
+                            <span class="mini-tag">R²</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-marker">
+                        <div class="timeline-dot">05</div>
+                    </div>
+                    <div class="timeline-content">
+                        <h3>Performance Analysis</h3>
+                        <p>
+                            Displays model evaluation information and
+                            visualizations such as actual-versus-predicted
+                            prices and residual error distribution.
+                        </p>
+                        <div class="mini-tags">
+                            <span class="mini-tag">Evaluation</span>
+                            <span class="mini-tag">Residuals</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-marker">
+                        <div class="timeline-dot">06</div>
+                    </div>
+                    <div class="timeline-content">
+                        <h3>About Project</h3>
+                        <p>
+                            Documents the project objective, dataset,
+                            preprocessing, model-building methodology,
+                            evaluation and web application workflow.
+                        </p>
+                        <div class="mini-tags">
+                            <span class="mini-tag">Documentation</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 10 LIMITATIONS -->
+    <section class="doc-section" id="limitations">
+        <div class="section-heading">
+            <div class="section-icon">10</div>
+            <div>
+                <h2>Limitations and Future Improvements</h2>
+                <p>Understanding what the current model can and cannot do.</p>
+            </div>
+        </div>
+
+        <div class="doc-grid">
+            <article class="doc-card">
+                <h3>Current Limitations</h3>
+                <div class="doc-list">
+                    <div class="doc-list-item">
+                        <span class="list-number">!</span>
+                        <div>
+                            <strong>Historical listing data</strong>
+                            <p>
+                                Predictions reflect patterns in the dataset
+                                and may not match current market prices.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="doc-list-item">
+                        <span class="list-number">!</span>
+                        <div>
+                            <strong>Limited input variables</strong>
+                            <p>
+                                Factors such as exact locality, age of
+                                building, amenities and market conditions
+                                may not be represented.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="doc-list-item">
+                        <span class="list-number">!</span>
+                        <div>
+                            <strong>Prediction uncertainty</strong>
+                            <p>
+                                A model estimate is not a guaranteed sale
+                                price or a professional property valuation.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <article class="doc-card">
+                <h3>Future Improvements</h3>
+                <div class="doc-list">
+                    <div class="doc-list-item">
+                        <span class="list-number">+</span>
+                        <div>
+                            <strong>More features</strong>
+                            <p>Add verified locality, amenities, building age and other useful attributes.</p>
+                        </div>
+                    </div>
+                    <div class="doc-list-item">
+                        <span class="list-number">+</span>
+                        <div>
+                            <strong>Further model experiments</strong>
+                            <p>Test other regression algorithms and tune hyperparameters.</p>
+                        </div>
+                    </div>
+                    <div class="doc-list-item">
+                        <span class="list-number">+</span>
+                        <div>
+                            <strong>Stronger validation</strong>
+                            <p>Use cross-validation and compare errors across price ranges and cities.</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- 11 WORKFLOW -->
+    <section class="doc-section" id="workflow">
+        <div class="section-heading">
+            <div class="section-icon">11</div>
+            <div>
+                <h2>Complete End-to-End Workflow</h2>
+                <p>From the original CSV to the final interactive website.</p>
+            </div>
+        </div>
+
+        <div class="doc-card">
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-marker"><div class="timeline-dot">1</div></div>
+                    <div class="timeline-content">
+                        <h3>Acquire the dataset</h3>
+                        <p>Load Makaan_Properties_Buy.csv into Google Colab.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-marker"><div class="timeline-dot">2</div></div>
+                    <div class="timeline-content">
+                        <h3>Inspect and understand the data</h3>
+                        <p>Review rows, columns, data types, sample records and missing values.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-marker"><div class="timeline-dot">3</div></div>
+                    <div class="timeline-content">
+                        <h3>Clean and prepare the dataset</h3>
+                        <p>Prepare the residential dataset and retain the selected target and input features.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-marker"><div class="timeline-dot">4</div></div>
+                    <div class="timeline-content">
+                        <h3>Perform exploratory analysis</h3>
+                        <p>Inspect price patterns, property characteristics and city/category distributions.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-marker"><div class="timeline-dot">5</div></div>
+                    <div class="timeline-content">
+                        <h3>Prepare features and target</h3>
+                        <p>Define X and y, and apply the required numerical and categorical transformations.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-marker"><div class="timeline-dot">6</div></div>
+                    <div class="timeline-content">
+                        <h3>Split the dataset</h3>
+                        <p>Use an 80% training set and a 20% test set with random_state=42.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-marker"><div class="timeline-dot">7</div></div>
+                    <div class="timeline-content">
+                        <h3>Train both regression models</h3>
+                        <p>Fit Linear Regression and Decision Tree Regressor pipelines.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-marker"><div class="timeline-dot">8</div></div>
+                    <div class="timeline-content">
+                        <h3>Evaluate and compare</h3>
+                        <p>Compare MAE, RMSE, R² score and recorded training time.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-marker"><div class="timeline-dot">9</div></div>
+                    <div class="timeline-content">
+                        <h3>Save the pipelines and report</h3>
+                        <p>Save the trained model files and evaluation report for the application.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-marker"><div class="timeline-dot">10</div></div>
+                    <div class="timeline-content">
+                        <h3>Build the Flask application</h3>
+                        <p>Load the saved model, accept user inputs and display the predicted price and analytics.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONCLUSION -->
+    <section class="project-footer">
+        <h2>Project Conclusion</h2>
+        <p>
+            HomeMate demonstrates an end-to-end machine learning workflow:
+            from preparing residential property data and training regression
+            models to evaluating their performance and integrating a saved
+            pipeline into a web application.
+            <br><br>
+            <strong>HomeMate — House Price Prediction Using Linear Regression and Decision Tree</strong>
+        </p>
+        <p class="muted-small" style="margin-top:13px;">
+            Evaluation figures shown on this page are the recorded project
+            results. They should be regenerated if the dataset, preprocessing
+            or model configuration changes.
+        </p>
+    </section>
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function () {
+    "use strict";
+
+    const printButton = document.getElementById("printDocumentation");
+
+    if (printButton) {
+        printButton.addEventListener("click", function () {
+            window.print();
+        });
+    }
+})();
+</script>
+{% endblock %}
