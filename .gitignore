@@ -8,3 +8,4 @@ __pycache__/
 .pytest_cache/
 .ipynb_checkpoints/
 Dataset/Makaan_Properties_Buy.csv
+Dataset/compressed_data.csv
