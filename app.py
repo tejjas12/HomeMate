@@ -142,12 +142,11 @@ def normalize_columns(df):
 
 
 def load_dataset(prefer_cleaned=False):
-    
-    filenames = ([CLEAN_FILENAME, COMPRESSED_FILENAME, RAW_FILENAME]
-    if prefer_cleaned
-    else [COMPRESSED_FILENAME, RAW_FILENAME, CLEAN_FILENAME]
-)
-
+    filenames = (
+        [CLEAN_FILENAME, RAW_FILENAME]
+        if prefer_cleaned
+        else [RAW_FILENAME, CLEAN_FILENAME]
+    )
 
     for filename in filenames:
         path = find_dataset(filename)
