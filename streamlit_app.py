@@ -6,6 +6,8 @@ import re
 import pandas as pd
 import streamlit as st
 import plotly.express as px
+import joblib
+import numpy as np
 
 BASE_DIR = Path(__file__).resolve().parent
 DATASET_DIRS = [BASE_DIR / "Dataset", BASE_DIR / "dataset"]
@@ -51,6 +53,21 @@ def find_column(df, candidates):
 
 
 df, source_file = load_data()
+
+
+MODEL_PATH = BASE_DIR / "models" / "decision_tree_pipeline.pkl"
+
+@st.cache_resource
+def load_model():
+    if MODEL_PATH.exists():
+        try:
+            return joblib.load(MODEL_PATH), None
+        except Exception as e:
+            return None, str(e)
+    return None, "Decision Tree model file was not found."
+
+price_model, model_error = load_model()
+
 
 if df.empty:
     st.error("Dataset not found or could not be loaded.")
@@ -110,8 +127,8 @@ if bhk_col:
         filtered[bhk_col].astype(str).isin(selected_bhks)
     ]
 
-tab1, tab2, tab3 = st.tabs(
-    ["📊 Dashboard", "🏙️ City Comparison", "🔍 Explore Data"]
+tab1, tab2, tab3, tab4 = st.tabs(
+    ["📊 Dashboard", "🏙️ City Comparison", "🔍 Explore Data", "💰 Price Prediction"]
 )
 
 with tab1:
@@ -256,3 +273,96 @@ with tab3:
 
 st.divider()
 st.caption("HomeMate | Real Estate Analytics")
+
+
+with tab4:
+    st.subheader("💰 Property Price Prediction")
+    st.write("Enter the property details to estimate its price.")
+
+    if price_model is None:
+        st.error("The Decision Tree model could not be loaded.")
+        st.caption(str(model_error))
+        st.info(
+            "Check that models/decision_tree_pipeline.pkl exists "
+            "and that scikit-learn is compatible with the saved model."
+        )
+    else:
+        with st.form("price_prediction_form"):
+            col1, col2 = st.columns(2)
+
+            with col1:
+                size = st.number_input(
+                    "Property Size (sq. ft.)",
+                    min_value=100.0,
+                    max_value=100000.0,
+                    value=1000.0,
+                    step=100.0,
+                )
+                bhk = st.number_input(
+                    "Number of BHK",
+                    min_value=1,
+                    max_value=20,
+                    value=2,
+                    step=1,
+                )
+                city = st.selectbox(
+                    "City",
+                    sorted(df[city_col].dropna().astype(str).unique())
+                    if city_col else ["Mumbai"],
+                )
+
+            with col2:
+                property_type = st.selectbox(
+                    "Property Type",
+                    sorted(df[type_col].dropna().astype(str).unique())
+                    if type_col else ["Apartment"],
+                )
+                property_status = st.selectbox(
+                    "Property Status",
+                    sorted(df[status_col].dropna().astype(str).unique())
+                    if status_col else ["Ready to Move"],
+                )
+                furnished = st.selectbox(
+                    "Furnished",
+                    ["Yes", "No"],
+                )
+                ready_to_move = st.selectbox(
+                    "Ready to Move",
+                    ["Yes", "No"],
+                )
+
+            submitted = st.form_submit_button(
+                "Predict Property Price",
+                type="primary",
+            )
+
+        if submitted:
+            input_data = pd.DataFrame([{
+                "Size": size,
+                "No_of_BHK": bhk,
+                "Property_type": property_type,
+                "Property_status": property_status,
+                "City_name": city,
+                "is_furnished": 1 if furnished == "Yes" else 0,
+                "is_ready_to_move": 1 if ready_to_move == "Yes" else 0,
+            }])
+
+            try:
+                prediction = float(price_model.predict(input_data)[0])
+
+                if not np.isfinite(prediction) or prediction <= 0:
+                    st.error("The model returned an invalid price.")
+                else:
+                    st.success("Estimated Property Price")
+                    st.metric(
+                        "Predicted Price",
+                        f"₹{prediction:,.0f}",
+                    )
+                    st.caption(
+                        "This is a machine-learning estimate, not a "
+                        "guaranteed market price."
+                    )
+            except Exception as e:
+                st.error("Prediction failed. Check the model's input format.")
+                st.code(str(e))
+
